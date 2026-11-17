@@ -17,7 +17,8 @@ const anek = Anek_Malayalam({
 
 export const metadata: Metadata = {
   title: "Sa Hai · സഹായ്",
-  description: "Malayalam-first accessible assistant",
+  description: "Malayalam-first accessible assistant designed for everyday users.",
+  keywords: ["Sa Hai", "Malayalam assistant", "AI tool Kerala", "സഹായ്"],
   manifest: "/manifest.webmanifest",
   icons: { icon: "/icon-192.png", apple: "/icon-192.png" },
   verification: {
