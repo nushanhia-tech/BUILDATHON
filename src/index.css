@@ -501,9 +501,8 @@ html:not(.hc) .bg-primary {
 .voice-hero input {
   width: 100%;
 }
-.service-grid .tile {
-  min-height: 10rem;
-}
+.service-grid .tile { min-height: 7.5rem; }
+.service-grid.is-simple .tile { min-height: 4.25rem; padding: .75rem 1rem; flex-direction: row; align-items: center; justify-content: flex-start; gap: .9rem; }
 .portal-shell {
   padding: 1rem;
   gap: 1rem;
@@ -813,3 +812,9 @@ html.hc {
   height: 3rem;
   border-radius: 1rem;
 }
+
+/* Top bar never wraps; brand text hides on very narrow phones (logo stays) */
+.user-topbar { flex-wrap: nowrap; }
+.user-topbar .user-brand { margin: 0 !important; white-space: nowrap; min-width: 0; }
+.user-topbar .lang-toggle { white-space: nowrap; padding: 0 .7rem; }
+@media (max-width: 380px) { .user-topbar .brand-name { display: none; } }

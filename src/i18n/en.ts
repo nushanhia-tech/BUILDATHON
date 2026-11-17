@@ -345,6 +345,7 @@ export const en: Record<StringKey, string> = {
   goodAfternoon: "Good afternoon",
   goodEvening: "Good evening",
   speakAsk: "🎤 Ask by speaking",
+  tapToSpeak: "Tap and speak",
   speakAskSub: "e.g. “medicine”, “see the doctor tomorrow”",
   typeHere: "Type here…",
   listening: "Listening… please speak",

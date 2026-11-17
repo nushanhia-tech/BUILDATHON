@@ -347,6 +347,7 @@ export const ml = {
   goodAfternoon: "ശുഭ ഉച്ച",
   goodEvening: "ശുഭ സന്ധ്യ",
   speakAsk: "🎤 സംസാരിച്ച് ചോദിക്കൂ",
+  tapToSpeak: "തൊട്ട് സംസാരിക്കൂ",
   speakAskSub: "ഉദാ: “മരുന്ന്”, “നാളെ ഡോക്ടറെ കാണണം”",
   typeHere: "ഇവിടെ ടൈപ്പ് ചെയ്യൂ…",
   listening: "കേൾക്കുന്നു… സംസാരിക്കൂ",

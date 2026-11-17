@@ -140,17 +140,11 @@ export default function Home() {
           aria-hidden="true"
           className="absolute -right-6 -top-6 w-36 h-36 rounded-full bg-white/10"
         />
-        <div
-          aria-hidden="true"
-          className="absolute right-4 top-4 w-14 h-14 rounded-2xl bg-white/20 grid place-items-center"
-        >
-          <Icon name="mic" size={30} />
-        </div>
-        <h2 className="text-[1.1rem] font-bold pr-16">
+        <h2 className="text-[1.1rem] font-bold">
           {splitLabel(t("speakAsk")).text}
         </h2>
         {!simple && (
-          <p className="opacity-90 pr-16 text-[0.9rem]">{t("speakAskSub")}</p>
+          <p className="opacity-90 text-[0.9rem]">{t("speakAskSub")}</p>
         )}
         {stt.supported ? (
           <button
@@ -160,7 +154,7 @@ export default function Home() {
             className={`self-start min-h-12 px-5 rounded-full font-semibold inline-flex items-center gap-2 shadow ${stt.listening ? "bg-danger text-white animate-pulse" : "bg-white text-primary"}`}
           >
             <Icon name={stt.listening ? "stop" : "mic"} size={20} />
-            {stt.listening ? t("listening") : splitLabel(t("speakAsk")).text}
+            {stt.listening ? t("listening") : t("tapToSpeak")}
           </button>
         ) : (
           <p className="text-sm bg-white/15 rounded-2xl p-3">{t("noStt")}</p>
@@ -260,7 +254,7 @@ export default function Home() {
           <p className="card p-5 text-muted">{t("noModules")}</p>
         ) : (
           <div
-            className={`service-grid grid gap-3 ${simple ? "grid-cols-1" : "grid-cols-2"}`}
+            className={`service-grid grid gap-3 ${simple ? "grid-cols-1 is-simple" : "grid-cols-2"}`}
           >
             {visible.map((m) => {
               const label = pickLabel(lang, m.label_ml, m.label_en);
@@ -280,9 +274,7 @@ export default function Home() {
                   label={label}
                   sub={sub}
                   className={
-                    simple
-                      ? "min-h-20 !flex-row !items-center !justify-start text-[1.05rem]"
-                      : "min-h-28 text-[0.95rem]"
+                    simple ? "text-[1.05rem]" : "text-[0.95rem]"
                   }
                   to={isCustom(m.key) ? undefined : MODULE_ROUTES[m.key]}
                   href={isCustom(m.key) ? customHref(m.link_url) : undefined}

@@ -131,7 +131,8 @@ function UserShell() {
       </a>
       <div className="user-topbar">
         <div className="user-brand brand">
-          <img src="/icon-192.png" alt="" className="brand-logo" /> Sa Hai
+          <img src="/icon-192.png" alt="Sa Hai" className="brand-logo" />{" "}
+          <span className="brand-name">Sa Hai</span>
         </div>
         <div className="flex items-center gap-2">
           <LanguageToggle />
