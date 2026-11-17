@@ -74,7 +74,7 @@ export default function Home() {
       {/* Voice hero */}
       <section className="hero p-5 flex flex-col gap-3 relative overflow-hidden" aria-label={t("speakAsk")}>
         <div aria-hidden="true" className="absolute -right-6 -top-6 w-36 h-36 rounded-full bg-white/10" />
-        <div aria-hidden="true" className="absolute right-6 bottom-4 text-6xl opacity-90">🎙️</div>
+        <div aria-hidden="true" className="absolute right-5 top-5 text-5xl opacity-90">🎙️</div>
         <h2 className="text-[1.4rem] font-bold pr-16">{t("speakAsk").replace("🎤 ", "")}</h2>
         {!simple && <p className="opacity-90 pr-16">{t("speakAskSub")}</p>}
         {stt.supported ? (

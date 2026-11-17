@@ -15,7 +15,7 @@ export function BarChart({ rows, label }: { rows: { label: string; value: number
     <figure className="card p-5" aria-label={label}>
       <ul className="flex flex-col gap-3">
         {rows.map((r) => (
-          <li key={r.label} className="grid grid-cols-[9rem_1fr_3rem] items-center gap-3">
+          <li key={r.label} className="grid grid-cols-[11rem_1fr_3rem] items-center gap-3">
             <span className="truncate">{r.label}</span>
             <span className="h-6 rounded-full bg-soft overflow-hidden" aria-hidden="true">
               <span className="block h-full rounded-full" style={{ width: `${(r.value / max) * 100}%`, background: r.color ?? "var(--primary)" }} />

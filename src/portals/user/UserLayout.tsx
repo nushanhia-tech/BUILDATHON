@@ -55,7 +55,7 @@ function UserShell() {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <ThemeSync s={settings} />
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-surface p-3 rounded-xl z-50">Skip</a>
       <main id="main" className={`mx-auto w-full max-w-xl px-4 pt-5 ${onboarding ? "pb-10" : "safe-bottom"}`}>

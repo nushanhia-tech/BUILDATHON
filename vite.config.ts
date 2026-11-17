@@ -30,7 +30,8 @@ export default defineConfig({
         navigateFallbackDenylist: [/^\/api\//],
         globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
         // App shell is precached; large ML bundles (TensorFlow, Tesseract) are cached on first use.
-        maximumFileSizeToCacheInBytes: 380 * 1024,
+        globIgnores: ["**/assets/ml-*.js"],
+        maximumFileSizeToCacheInBytes: 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith("/assets/"),
@@ -51,5 +52,18 @@ export default defineConfig({
       },
     }),
   ],
-  build: { chunkSizeWarningLimit: 2000 },
+  build: {
+    chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      output: {
+        // Stable names for heavy ML chunks so the service worker can skip precaching them.
+        chunkFileNames: (chunk) => {
+          const ids = chunk.moduleIds ?? [];
+          if (ids.some((id) => id.includes("@tensorflow"))) return "assets/ml-tf-[hash].js";
+          if (ids.some((id) => id.includes("tesseract"))) return "assets/ml-ocr-[hash].js";
+          return "assets/[name]-[hash].js";
+        },
+      },
+    },
+  },
 });

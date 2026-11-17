@@ -94,16 +94,20 @@ export function MedicinesManager({ userId, actor, level = "full", showHistory = 
             <div key={s.key} className="flex flex-col gap-2 mb-3">
               <h3 className="font-bold text-muted">{s.icon} {s.label}</h3>
               {ds.map((d) => (
-                <div key={d.medicine.id + d.time} className={`card p-3 flex items-center gap-3 ${d.status === "missed" ? "border-l-8 border-danger" : d.status === "due" ? "border-l-8 border-warn" : ""}`}>
-                  {d.medicine.photo_url ? <img src={d.medicine.photo_url} alt="" className="w-16 h-16 rounded-2xl object-cover" />
-                    : <span className="w-16 h-16 rounded-2xl bg-soft grid place-items-center text-3xl" aria-hidden="true">💊</span>}
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold">{d.medicine.name}</p>
-                    <p className="text-muted text-base">🕒 {fmtTime(d.scheduled, lang)}{d.medicine.notes ? ` · ${d.medicine.notes}` : ""}</p>
+                <div key={d.medicine.id + d.time} className={`card p-3 flex flex-col gap-3 ${d.status === "missed" ? "border-l-8 border-danger" : d.status === "due" ? "border-l-8 border-warn" : ""}`}>
+                  <div className="flex items-center gap-3">
+                    {d.medicine.photo_url ? <img src={d.medicine.photo_url} alt="" className="w-16 h-16 rounded-2xl object-cover shrink-0" />
+                      : <span className="w-16 h-16 rounded-2xl bg-soft grid place-items-center text-3xl shrink-0" aria-hidden="true">💊</span>}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold break-words">{d.medicine.name}</p>
+                      <p className="text-muted text-base">🕒 {fmtTime(d.scheduled, lang)}{d.medicine.notes ? ` · ${d.medicine.notes}` : ""}</p>
+                    </div>
+                    {(d.taken || actor !== "user") && (d.taken ? <Badge tone="success">{t("takenDone")}</Badge>
+                      : <Badge tone={d.status === "missed" ? "danger" : "soft"}>{d.status === "missed" ? t("missed") : t("upcoming")}</Badge>)}
                   </div>
-                  {d.taken ? <Badge tone="success">{t("takenDone")}</Badge>
-                    : actor === "user" ? <BigButton variant={d.status === "upcoming" ? "soft" : "success"} label={t("taken")} onClick={() => void take(d)} className="!px-4" />
-                    : <Badge tone={d.status === "missed" ? "danger" : "soft"}>{d.status === "missed" ? t("missed") : t("upcoming")}</Badge>}
+                  {!d.taken && actor === "user" && (
+                    <BigButton variant={d.status === "upcoming" ? "soft" : "success"} label={t("taken")} onClick={() => void take(d)} className="w-full" />
+                  )}
                 </div>
               ))}
             </div>
@@ -114,15 +118,17 @@ export function MedicinesManager({ userId, actor, level = "full", showHistory = 
       <Section title={t("medicinesTitle")}>
         <ul className="flex flex-col gap-2">
           {meds.map((m) => (
-            <li key={m.id} className="card p-3 flex items-center gap-3">
-              <span className="flex-1">
-                <span className="block font-bold">{m.name} {m.needs_confirmation && <Badge tone="warn">{t("pendingApprovalBadge")}</Badge>}</span>
+            <li key={m.id} className="card p-3 flex flex-col gap-2">
+              <span>
+                <span className="block font-bold break-words">{m.name} {m.needs_confirmation && <Badge tone="warn">{t("pendingApprovalBadge")}</Badge>}</span>
                 <span className="block text-base text-muted">{m.times.map((x) => hhmm12(x, lang)).join(" · ")}</span>
                 {m.added_by && m.added_by !== userId && <span className="block text-sm text-muted">+ {names[m.added_by] ?? ""}</span>}
               </span>
-              <button type="button" onClick={() => speak(`${m.name}. ${m.times.map((x) => hhmm12(x, lang)).join(", ")}. ${m.notes ?? ""}`, { force: true })} aria-label={`${t("readAloud")}: ${m.name}`} className="min-h-14 min-w-14 rounded-2xl bg-soft">🔊</button>
-              {canEdit && <button type="button" onClick={() => setEdit(m)} aria-label={`${t("edit")}: ${m.name}`} className="min-h-14 min-w-14 rounded-2xl bg-soft">✏️</button>}
-              {canEdit && <button type="button" onClick={() => setDel(m)} aria-label={`${t("delete")}: ${m.name}`} className="min-h-14 min-w-14 rounded-2xl bg-soft text-danger">🗑️</button>}
+              <span className="flex gap-2">
+                <button type="button" onClick={() => speak(`${m.name}. ${m.times.map((x) => hhmm12(x, lang)).join(", ")}. ${m.notes ?? ""}`, { force: true })} aria-label={`${t("readAloud")}: ${m.name}`} className="flex-1 min-h-14 rounded-2xl bg-soft">🔊</button>
+                {canEdit && <button type="button" onClick={() => setEdit(m)} aria-label={`${t("edit")}: ${m.name}`} className="flex-1 min-h-14 rounded-2xl bg-soft">✏️</button>}
+                {canEdit && <button type="button" onClick={() => setDel(m)} aria-label={`${t("delete")}: ${m.name}`} className="flex-1 min-h-14 rounded-2xl bg-soft text-danger">🗑️</button>}
+              </span>
             </li>
           ))}
         </ul>
