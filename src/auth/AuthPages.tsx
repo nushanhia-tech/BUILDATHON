@@ -34,12 +34,9 @@ function AuthShell({
   const { t, lang } = useI18n();
   return (
     <main className="auth-page">
-      <section className="auth-story" aria-label="Nila">
+      <section className="auth-story" aria-label="Sa Hai">
         <a className="brand" href="/">
-          <span className="brand-symbol" aria-hidden="true">
-            ✦
-          </span>{" "}
-          {lang === "en" ? "Nila" : `${t("appName")} · Nila`}
+          <img src="/icon-192.png" alt="" className="brand-logo" /> Sa Hai
         </a>
         <div className="auth-story-copy">
           <p className="eyebrow">
@@ -66,13 +63,13 @@ function AuthShell({
         <div className="care-illustration" aria-hidden="true">
           <div className="orbit orbit-one" />
           <div className="orbit orbit-two" />
-          <span className="care-orb">✦</span>
+          <img src="/logo.png" alt="" className="care-logo" />
           <span className="floating-token token-one">♡</span>
           <span className="floating-token token-two">✧</span>
           <span className="floating-token token-three">♫</span>
         </div>
         <div className="auth-story-foot">
-          <span>01 — NILA</span>
+          <span>Sa Hai · സഹായ്</span>
           <span>{lang === "en" ? "Made for you" : "നിങ്ങൾക്കായി"} ↗</span>
         </div>
       </section>
@@ -82,11 +79,9 @@ function AuthShell({
         </div>
         <div className="auth-form-wrap">
           <div className="auth-heading">
-            <span className="auth-mark" aria-hidden="true">
-              ✦
-            </span>
+            <img src="/icon-192.png" alt="" className="auth-mark auth-logo" />
             <p className="eyebrow">
-              {lang === "en" ? "WELCOME TO NILA" : `${t("appName")} · NILA`}
+              {lang === "en" ? "WELCOME TO SA HAI" : "Sa Hai · സഹായ്"}
             </p>
             <h1>{title}</h1>
             <p className="text-muted">{sub}</p>
@@ -222,7 +217,16 @@ export function SignupPage() {
         },
       });
       if (error) throw error;
-      if (data.session)
+      // Preserve immediate login while routing the new volunteer role correctly.
+      let session = data.session;
+      if (!session) {
+        const res = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        });
+        session = res.data.session;
+      }
+      if (session)
         nav(
           role === "volunteer"
             ? "/volunteer/profile"

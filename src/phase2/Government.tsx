@@ -150,10 +150,10 @@ export default function Government() {
               >
                 <option value="">{t("all")}</option>
                 {(k === "age"
-                    ? ["<18", "18-40", "41-60", "61-75", "75+"]
-                    : k === "disability"
-                      ? DISABILITIES
-                      : NEEDS
+                  ? ["<18", "18-40", "41-60", "61-75", "75+"]
+                  : k === "disability"
+                    ? DISABILITIES
+                    : NEEDS
                 ).map((o) => (
                   <option key={o} value={o}>
                     {label(o)}

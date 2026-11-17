@@ -76,27 +76,24 @@ export default function Survey({ userId }: { userId?: string }) {
   ].includes(question);
   const finish = async () => {
     setBusy(true);
-    const r = await supabase
-      .from("needs_surveys")
-      .insert({
-        subject_user_id:
-          userId ||
-          (["volunteer"].includes(profile!.role) ? null : profile!.id),
-        consent_given: true,
-        age_group: answers.ageGroup || null,
-        gender: answers.gender || null,
-        district: answers.district || null,
-        panchayat_or_municipality: answers.panchayat || null,
-        ward: answers.ward || null,
-        disability_types: answers.disabilities || [],
-        lives_alone: answers.livesAlone ?? null,
-        has_caregiver: answers.hasCaregiver ?? null,
-        needs: answers.surveyNeeds || [],
-        has_disability_certificate: answers.hasCertificate ?? null,
-        receives_pension: answers.receivesPension ?? null,
-        internet_access: answers.internetAccess || null,
-        main_difficulty: answers.mainDifficulty || null,
-      });
+    const r = await supabase.from("needs_surveys").insert({
+      subject_user_id:
+        userId || (["volunteer"].includes(profile!.role) ? null : profile!.id),
+      consent_given: true,
+      age_group: answers.ageGroup || null,
+      gender: answers.gender || null,
+      district: answers.district || null,
+      panchayat_or_municipality: answers.panchayat || null,
+      ward: answers.ward || null,
+      disability_types: answers.disabilities || [],
+      lives_alone: answers.livesAlone ?? null,
+      has_caregiver: answers.hasCaregiver ?? null,
+      needs: answers.surveyNeeds || [],
+      has_disability_certificate: answers.hasCertificate ?? null,
+      receives_pension: answers.receivesPension ?? null,
+      internet_access: answers.internetAccess || null,
+      main_difficulty: answers.mainDifficulty || null,
+    });
     setBusy(false);
     if (r.error) toast(r.error.message, "error");
     else {

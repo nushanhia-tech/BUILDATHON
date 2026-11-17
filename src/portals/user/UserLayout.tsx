@@ -59,6 +59,26 @@ function ThemeSync({ s }: { s: UserSettings | null }) {
   return null;
 }
 
+/** Switch Malayalam ⇄ English anytime after login; saved to the user's settings. */
+function LanguageToggle() {
+  const { lang, setLang, t } = useI18n();
+  const { save } = useUserSettings();
+  const next = lang === "ml" ? "en" : "ml";
+  return (
+    <button
+      type="button"
+      className="lang-toggle"
+      aria-label={`${t("language")}: ${next === "en" ? "English" : "മലയാളം"}`}
+      onClick={() => {
+        setLang(next);
+        void save({ language: next }).catch(() => {});
+      }}
+    >
+      🌐 {next === "en" ? "English" : "മലയാളം"}
+    </button>
+  );
+}
+
 function UserShell() {
   const { settings, loaded, isOn } = useUserSettings();
   const { t } = useI18n();
@@ -107,11 +127,11 @@ function UserShell() {
       >
         Skip
       </a>
-      <div className="user-brand brand">
-        <span className="brand-symbol" aria-hidden="true">
-          ✦
-        </span>{" "}
-        {t("appName") === "Nila" ? "Nila" : `${t("appName")} · Nila`}
+      <div className="user-topbar">
+        <div className="user-brand brand">
+          <img src="/icon-192.png" alt="" className="brand-logo" /> Sa Hai
+        </div>
+        <LanguageToggle />
       </div>
       <PhaseRuntime />
       <main
@@ -129,7 +149,7 @@ function UserShell() {
                   to={tab.to}
                   end={tab.end}
                   className={({ isActive }) =>
-                    `min-h-20 flex flex-col items-center justify-center gap-0.5 font-semibold text-base ${isActive ? "text-primary" : "text-muted"}`
+                    `min-h-16 flex flex-col items-center justify-center gap-0.5 font-semibold text-sm ${isActive ? "text-primary" : "text-muted"}`
                   }
                 >
                   <span aria-hidden="true" className="text-2xl">
@@ -242,17 +262,15 @@ function MedicineReminder() {
     setDue(null);
   };
   const take = async () => {
-    const { error } = await supabase
-      .from("med_logs")
-      .upsert(
-        {
-          medicine_id: due.medicine.id,
-          user_id: uid,
-          scheduled_for: due.scheduled.toISOString(),
-          taken_at: new Date().toISOString(),
-        },
-        { onConflict: "medicine_id,scheduled_for" },
-      );
+    const { error } = await supabase.from("med_logs").upsert(
+      {
+        medicine_id: due.medicine.id,
+        user_id: uid,
+        scheduled_for: due.scheduled.toISOString(),
+        taken_at: new Date().toISOString(),
+      },
+      { onConflict: "medicine_id,scheduled_for" },
+    );
     if (error) toast(error.message, "error");
     else {
       toast(t("takenDone"), "success");

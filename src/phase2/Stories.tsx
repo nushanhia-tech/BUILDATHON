@@ -73,14 +73,12 @@ export default function Stories({ create = false }: { create?: boolean }) {
               disabled={busy}
               onClick={async () => {
                 setBusy(true);
-                const r = await supabase
-                  .from("posts")
-                  .insert({
-                    ...d,
-                    transcript: d.text,
-                    language: lang,
-                    status: "pending",
-                  });
+                const r = await supabase.from("posts").insert({
+                  ...d,
+                  transcript: d.text,
+                  language: lang,
+                  status: "pending",
+                });
                 setBusy(false);
                 if (r.error) toast(r.error.message, "error");
                 else {

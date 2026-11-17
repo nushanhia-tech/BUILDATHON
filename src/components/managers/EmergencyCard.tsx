@@ -20,7 +20,7 @@ export function useEmergencyInfo(userId: string) {
 
 export function summaryText(name: string, info: EmergencyInfo | null, contacts: Contact[]) {
   const lines = [
-    `NILA EMERGENCY CARD`,
+    `SA HAI EMERGENCY CARD`,
     `പേര്/Name: ${name}`,
     info?.blood_group && `രക്തഗ്രൂപ്പ്/Blood: ${info.blood_group}`,
     info?.allergies && `അലർജി/Allergies: ${info.allergies}`,

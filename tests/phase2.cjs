@@ -3,7 +3,7 @@ const fs = require("fs");
 (async () => {
   const db = new PGlite();
   await db.exec(
-    `create role anon;create role authenticated;create schema auth;create schema storage;create table auth.users(id uuid primary key,email text,raw_user_meta_data jsonb default '{}');create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);create table storage.objects(id uuid,name text,bucket_id text,owner uuid);create function storage.foldername(text) returns text[] language sql as $$select string_to_array($1,'/')$$;`,
+    `create role anon;create role authenticated;create schema auth;create schema storage;create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz,raw_user_meta_data jsonb default '{}');create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);create table storage.objects(id uuid,name text,bucket_id text,owner uuid);create function storage.foldername(text) returns text[] language sql as $$select string_to_array($1,'/')$$;`,
   );
   let s = fs
     .readFileSync("./supabase/schema.sql", "utf8")
@@ -106,6 +106,31 @@ const fs = require("fs");
   console.log(
     "PASS gallery family audit, GPS consent, zone exit/return, revocation",
   );
+  await auth(u);
+  await db.exec(
+    `update family_links set level='assist' where family_id='${view}';`,
+  );
+  await auth(view);
+  await db.exec(
+    `insert into medicines(id,user_id,name,times,stock_count) values('55555555-5555-4555-8555-555555555555','${u}','Pending stock',array['10:00'],4)`,
+  );
+  await auth(u);
+  if (
+    (await count(
+      "select count(*) n from alerts where data->>'medicine_id'='55555555-5555-4555-8555-555555555555'",
+    )) !== 0
+  )
+    throw Error("Unconfirmed family medicine triggered an alarm");
+  await db.exec(
+    "update medicines set needs_confirmation=false where id='55555555-5555-4555-8555-555555555555'",
+  );
+  if (
+    (await count(
+      "select count(*) n from alerts where data->>'medicine_id'='55555555-5555-4555-8555-555555555555'",
+    )) !== 1
+  )
+    throw Error("Confirmed low stock missed alert");
+  console.log("PASS assist-level confirmation before stock alerts");
   await auth(x);
   if ((await count("select count(*) n from gallery_people")) !== 0)
     throw Error("Gallery leaked");
@@ -187,8 +212,10 @@ const fs = require("fs");
   if (feed.rows[0].author_name !== null || "author_id" in feed.rows[0])
     throw Error("Feed exposed anonymous identity");
   await auth(gov);
-  if(await count('select count(*) n from profiles_public')!==0)throw Error('Government leaked names through legacy profiles view');
-  if(await count('select count(*) n from wheelchairs_public')!==0)throw Error('Government leaked names through legacy wheelchair view');
+  if ((await count("select count(*) n from profiles_public")) !== 0)
+    throw Error("Government leaked names through legacy profiles view");
+  if ((await count("select count(*) n from wheelchairs_public")) !== 0)
+    throw Error("Government leaked names through legacy wheelchair view");
 
   if ((await count("select count(*) n from needs_surveys")) !== 0)
     throw Error("Government raw survey leak");

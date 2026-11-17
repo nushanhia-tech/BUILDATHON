@@ -1,4 +1,4 @@
-# നിള · Nila
+# Sa Hai · സഹായ്
 
 **Built for the Overlooked.** A Malayalam-first, voice-first, mobile-first PWA for elderly people, people with mobility disabilities, Deaf / hard-of-hearing and blind / low-vision people.
 _Technology that adapts to people, not people to technology._
@@ -23,7 +23,7 @@ Stack (all free tiers): Next.js App Router + React + TypeScript, Tailwind CSS v4
 2. **Authentication → Providers → Email**: keep Email enabled. For a buildathon demo, turn **off** "Confirm email" so new signups can log in immediately.
 3. **SQL Editor → New query** → paste the whole of [`supabase/schema.sql`](supabase/schema.sql) → **Run**.
    - It creates every table, RLS policy, trigger, RPC, the `wheelchairs_public` / `profiles_public` views, the public **`photos` storage bucket** with its policies, Realtime publication entries, and all seed data (modules, sub-features, 20 sign cards, 10 quick phrases, helplines, 10 DEMO wheelchairs, 3 demo accounts).
-   - It is **re-runnable** (it drops Nila's objects first — this wipes app data).
+   - It is **re-runnable** (it drops Sa Hai's objects first — this wipes app data).
    - If you see a notice about `supabase_realtime`, enable Realtime under **Database → Publications** and re-run.
 4. **Storage**: nothing to do — the `photos` bucket (public read, authenticated write into `<uid>/…`) is created by the SQL. Verify it exists under **Storage**.
 5. **Project Settings → API**: copy the **Project URL** and **anon public key**.
@@ -65,7 +65,7 @@ Password for all: **`NilaDemo@123`** (also one-tap fill on the login page).
 | ------------------ | ------ | -------------------------------------------------------------------------- |
 | `user@nila.demo`   | user   | **ഉമ്മ (Ummah)**, Simple Mode, 2 medicines, tasks, contacts, emergency card |
 | `family@nila.demo` | family | **അബ്ദുൾ (Abdul)**, linked to Ummah with **full** access                     |
-| `admin@nila.demo`  | admin  | Also owns the 10 DEMO wheelchairs as "Nila Demo Org (ഡെമോ)", verified      |
+| `admin@nila.demo`  | admin  | Also owns the 10 DEMO wheelchairs as "Sa Hai Demo Org (ഡെമോ)", verified    |
 
 All demo wheelchairs are flagged `is_demo` and show a **ഡെമോ / DEMO** badge. To make someone admin: `update profiles set role = 'admin' where id = '<uuid>';`
 
@@ -149,7 +149,7 @@ After importing the repo, add the public Supabase URL/key and optional server-on
 Gemini key to Vercel, then deploy. Set the deployed URL in Supabase Auth URL configuration.
 Do not run the destructive demo schema against an existing production database.
 
-Repository review: Nila includes medicine and task tracking, voice navigation,
+Repository review: Sa Hai includes medicine and task tracking, voice navigation,
 vision/hearing assistance, wheelchair listings, consent-based family management,
 and administrative controls. Supabase supplies authentication, relational data,
 row-level access rules, storage and realtime updates. Sign-card SVGs are placeholders.
@@ -157,6 +157,8 @@ Live database access and Gemini require project credentials; a successful build 
 does not verify those integrations.
 
 ## 8. Phase 2 — additive installation
+
+Sa Hai keeps the original Nila demo email addresses and internal data keys for compatibility.
 
 **Existing installation:** back up the database, then run the entire
 [`supabase/phase2.sql`](supabase/phase2.sql) in Supabase **SQL Editor → New query**.
@@ -279,7 +281,7 @@ configured Supabase project and actual devices.
 - Stock may be fractional for half-tablets. Days-left estimates use the configured
   units per dose and daily schedule; they never change prescribed instructions.
 - Water goals are editable. Follow a clinician's fluid limit, especially for kidney
-  or heart disease. Nila does not prescribe fluid intake.
+  or heart disease. Sa Hai does not prescribe fluid intake.
 - Public help descriptions must not contain private addresses. Public map coordinates
   are offset by 200–500 m; only the assigned volunteer sees precise request coordinates.
   Volunteers need admin verification for escort, transport and companionship requests.

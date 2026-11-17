@@ -37,6 +37,7 @@ export interface HelpRow {
   urgency: string;
   volunteer_id: string;
   requester_id: string;
+  requested_for_user_id?: string;
   voice_url: string;
   created_at: string;
 }
@@ -111,7 +112,8 @@ export default function Help({
       : rows.filter((r) =>
           volunteer
             ? r.volunteer_id === profile!.id
-            : r.requester_id === profile!.id,
+            : r.requester_id === profile!.id ||
+              r.requested_for_user_id === profile!.id,
         );
   return (
     <div className="grid gap-4">
@@ -229,15 +231,13 @@ export default function Help({
                 <BigButton
                   label={t("confirmItem")}
                   onClick={async () => {
-                    const r = await supabase
-                      .from("help_requests")
-                      .insert({
-                        ...draft,
-                        preferred_time: draft.preferred_time
-                          ? new Date(draft.preferred_time).toISOString()
-                          : null,
-                        requested_for_user_id: userId || null,
-                      });
+                    const r = await supabase.from("help_requests").insert({
+                      ...draft,
+                      preferred_time: draft.preferred_time
+                        ? new Date(draft.preferred_time).toISOString()
+                        : null,
+                      requested_for_user_id: userId || null,
+                    });
                     if (r.error) toast(r.error.message, "error");
                     else {
                       setOpen(false);
@@ -509,14 +509,12 @@ function HelpDetail({
             <BigButton
               label={t("send")}
               onClick={async () => {
-                const result = await supabase
-                  .from("help_feedback")
-                  .insert({
-                    request_id: r.id,
-                    rating,
-                    thanks_message: thanks,
-                    voice_url: voice,
-                  });
+                const result = await supabase.from("help_feedback").insert({
+                  request_id: r.id,
+                  rating,
+                  thanks_message: thanks,
+                  voice_url: voice,
+                });
                 toast(
                   result.error?.message || t("saved"),
                   result.error ? "error" : "success",
@@ -546,14 +544,12 @@ export function ReportButton({ type, id }: { type: string; id: string }) {
       onClick={async () => {
         const reason = prompt(t("reportReason"));
         if (!reason) return;
-        const r = await supabase
-          .from("reports")
-          .insert({
-            item_type: type,
-            item_id: id,
-            reporter_id: profile!.id,
-            reason,
-          });
+        const r = await supabase.from("reports").insert({
+          item_type: type,
+          item_id: id,
+          reporter_id: profile!.id,
+          reason,
+        });
         toast(r.error?.message || t("saved"), r.error ? "error" : "success");
       }}
     >

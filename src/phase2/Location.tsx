@@ -92,14 +92,12 @@ export default function Location({
     enabled: boolean,
     share = consent.share_with_family,
   ) => {
-    const r = await supabase
-      .from("location_sharing")
-      .upsert({
-        user_id: uid,
-        enabled,
-        share_with_family: share,
-        updated_at: new Date().toISOString(),
-      });
+    const r = await supabase.from("location_sharing").upsert({
+      user_id: uid,
+      enabled,
+      share_with_family: share,
+      updated_at: new Date().toISOString(),
+    });
     if (r.error) toast(r.error.message, "error");
     else setConsent({ ...consent, enabled, share_with_family: share });
   };
@@ -107,6 +105,13 @@ export default function Location({
   const center: [number, number] = last
     ? [last.lat, last.lng]
     : [zone.lat || 10.81, zone.lng || 76.19];
+  if (userId && !consent.enabled)
+    return (
+      <div className="grid gap-4">
+        <PageHeader title={t("locationTitle")} icon="📍" />
+        <p className="card p-4">{t("locationNone")}</p>
+      </div>
+    );
   return (
     <div className="grid gap-4">
       <PageHeader title={t("locationTitle")} icon="📍" />

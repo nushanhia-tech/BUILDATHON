@@ -208,7 +208,7 @@ function MineTab() {
                 {r.contact?.phone && (
                   <div className="grid grid-cols-2 gap-2">
                     <BigButton variant="soft" label={t("call")} href={`tel:${phoneDigits(r.contact.phone)}`} />
-                    {r.contact.whatsapp && <BigButton variant="soft" label={t("whatsapp")} href={waLink(r.contact.phone, "Nila")} />}
+                    {r.contact.whatsapp && <BigButton variant="soft" label={t("whatsapp")} href={waLink(r.contact.phone, "Sa Hai")} />}
                   </div>
                 )}
                 {r.status === "pending" && (

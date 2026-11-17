@@ -53,7 +53,7 @@ export const en: Record<StringKey, string> = {
   govExport: "Export aggregated data",
   exportCsv: "Download CSV",
   exportPdf: "Download PDF",
-  generatedNila: "Generated from Nila, anonymised",
+  generatedNila: "Generated from Sa Hai, anonymised",
   platformSignals: "Live platform signals",
   topNeeds: "Top needs",
   suppressed: "<5",
@@ -117,7 +117,7 @@ export const en: Record<StringKey, string> = {
   impact: "My impact",
   certificate: "Download service certificate",
   serviceCertificate:
-    "Nila Volunteer — Social Service Certificate (self-reported hours; not an official accreditation)",
+    "Sa Hai Volunteer — Social Service Certificate (self-reported hours; not an official accreditation)",
   institution: "Institution",
   skills: "Skills",
   areaName: "Area",
@@ -154,7 +154,7 @@ export const en: Record<StringKey, string> = {
   locationSharing: "Location sharing is on",
   stopSharing: "Stop sharing",
   locationLimit:
-    "Location updates work only while Nila is open in the foreground. Browsers may stop background GPS.",
+    "Location updates work only while Sa Hai is open in the foreground. Browsers may stop background GPS.",
   zoneName: "Safe zone name",
   zoneRadius: "Radius (metres)",
   useGps: "Use my location",
@@ -195,7 +195,7 @@ export const en: Record<StringKey, string> = {
   alarmAck: "OK, I understand (1 day)",
   buyingMedicine: "I will bring the medicine",
   alarmTip:
-    "Reminders work while Nila is open. Install Nila and allow notifications. Sound may require a tap first.",
+    "Reminders work while Sa Hai is open. Install Sa Hai and allow notifications. Sound may require a tap first.",
   pharmacyOrder: "I need {qty} units of {name}.",
   alertsTitle: "Family alerts",
 
@@ -235,7 +235,7 @@ export const en: Record<StringKey, string> = {
   presetAll: "All services",
   presetCustom: "Choose myself",
 
-  appName: "Nila",
+  appName: "Sa Hai",
   tagline: "Technology that adapts to people",
   ok: "OK",
   cancel: "Cancel",
@@ -300,8 +300,7 @@ export const en: Record<StringKey, string> = {
   iAmFamily: "I am a family member",
   iAmFamilySub: "To help my loved ones",
   chooseRole: "Who are you?",
-  signupDone:
-    "Account created. Check your inbox if email confirmation is required.",
+  signupDone: "Account created. Please log in.",
   blocked: "This account is blocked. Please contact the admin.",
   demoAccounts: "Demo accounts",
   passwordMin: "At least 6 characters",
@@ -551,7 +550,7 @@ export const en: Record<StringKey, string> = {
     "Request sent. Once the owner accepts, you'll see their phone number and the exact location.",
   phoneAfterAccept:
     "The phone number is shown after the owner accepts your request.",
-  waPrefill: "Hello, is the wheelchair I saw on Nila available?",
+  waPrefill: "Hello, is the wheelchair I saw on Sa Hai available?",
   directions: "🧭 Directions",
   approxLocation: "Approximate location only (for privacy)",
   exactLocation: "Exact location",

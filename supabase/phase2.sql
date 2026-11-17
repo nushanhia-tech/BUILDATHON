@@ -52,13 +52,14 @@ drop trigger if exists med_stock_deduct on public.med_logs;
 create trigger med_stock_deduct after insert or update on public.med_logs for each row execute function public.deduct_med_stock();
 create or replace function public.med_stock_alert() returns trigger language plpgsql security definer set search_path=public as $$
 begin
- if new.stock_count is not null and new.stock_count<=new.low_stock_threshold and (tg_op='INSERT' or old.stock_count is null or old.stock_count>new.low_stock_threshold or (new.stock_count=0 and old.stock_count>0)) then
+ if not new.needs_confirmation and new.stock_count is not null and new.stock_count<=new.low_stock_threshold and (tg_op='INSERT' or old.needs_confirmation or old.stock_count is null or old.stock_count>new.low_stock_threshold or (new.stock_count=0 and old.stock_count>0)) then
   insert into alerts(user_id,type,message,data) values(new.user_id,'low_stock',new.name,jsonb_build_object('medicine_id',new.id,'stock',new.stock_count));
   new.refill_alert_sent_at=now();
  end if;return new;
 end $$;
 drop trigger if exists medicine_low_stock on public.medicines;
-create trigger medicine_low_stock before insert or update on public.medicines for each row execute function public.med_stock_alert();
+drop trigger if exists zz_med_stock_alert on public.medicines;
+create trigger zz_med_stock_alert before insert or update on public.medicines for each row execute function public.med_stock_alert();
 create or replace function public.refill_medicine(med uuid,quantity numeric) returns void language plpgsql security definer set search_path=public as $$
 declare target uuid;
 begin
@@ -70,9 +71,9 @@ create or replace function public.handle_alert(alert_id uuid) returns void langu
 declare a alerts;
 begin
  select * into a from alerts where id=alert_id for update;
- if not public.is_member() or not coalesce(can_full(a.user_id),false) then raise exception 'Not allowed';end if;
+ if not public.is_member() or not coalesce(can_full(a.user_id) or (a.type in ('zone_exit','zone_return') and can_see_location(a.user_id)),false) then raise exception 'Not allowed';end if;
  update alerts set read=true,handled_by=auth.uid() where id=alert_id;
- if a.user_id<>auth.uid() then insert into alerts(user_id,type,message) values(a.user_id,'handled',a.message); end if;
+ if a.user_id<>auth.uid() and a.type='low_stock' then insert into alerts(user_id,type,message) values(a.user_id,'handled',a.message); end if;
  insert into activity_log(user_id,changed_by,action,details) values(a.user_id,auth.uid(),'handle:alert',jsonb_build_object('id',alert_id));
 end $$;
 revoke all on function public.refill_medicine(uuid,numeric), public.handle_alert(uuid) from public;
@@ -442,4 +443,11 @@ begin
   update family_links set family_id = auth.uid() where id = l.id;
   return l.id;
 end $$;
+create or replace function public.log_feedback_family() returns trigger language plpgsql security definer set search_path=public as $$
+declare target uuid;begin
+ select requested_for_user_id into target from help_requests where id=new.request_id;
+ if target is not null and auth.uid() is not null and target<>auth.uid() then insert into activity_log(user_id,changed_by,action,details) values(target,auth.uid(),'insert:help_feedback',jsonb_build_object('request_id',new.request_id));end if;return new;
+end $$;
+drop trigger if exists feedback_family_log on public.help_feedback;
+create trigger feedback_family_log after insert on public.help_feedback for each row execute function public.log_feedback_family();
 commit;

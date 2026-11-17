@@ -98,10 +98,10 @@ export default function Home() {
       <header className="home-greeting flex items-start gap-3">
         <div className="flex-1">
           <p className="text-muted">{tod},</p>
-          <h1 className="text-[1.8rem] font-bold leading-tight">
+          <h1 className="text-[1.5rem] font-bold leading-snug">
             {t("greeting", { name: firstName })}
           </h1>
-          <p className="text-[1.3rem] text-primary font-semibold">
+          <p className="text-[1.1rem] text-primary font-semibold">
             {t("greetingSub")}
           </p>
         </div>
@@ -145,7 +145,7 @@ export default function Home() {
         >
           🎙️
         </div>
-        <h2 className="text-[1.4rem] font-bold pr-16">
+        <h2 className="text-[1.2rem] font-bold pr-16">
           {t("speakAsk").replace("🎤 ", "")}
         </h2>
         {!simple && <p className="opacity-90 pr-16">{t("speakAskSub")}</p>}
@@ -247,7 +247,7 @@ export default function Home() {
             : "services-section"
         }
       >
-        <h2 id="svc" className="text-[1.3rem] font-bold mb-3">
+        <h2 id="svc" className="text-[1.15rem] font-bold mb-3">
           {t("myServices")}
         </h2>
         {visible.length === 0 ? (
@@ -269,8 +269,8 @@ export default function Home() {
                   sub={sub}
                   className={
                     simple
-                      ? "min-h-28 !flex-row !justify-start text-[1.3rem]"
-                      : "min-h-40"
+                      ? "min-h-24 !flex-row !justify-start text-[1.15rem]"
+                      : "min-h-32"
                   }
                   to={isCustom(m.key) ? undefined : MODULE_ROUTES[m.key]}
                   href={isCustom(m.key) ? customHref(m.link_url) : undefined}
@@ -285,7 +285,7 @@ export default function Home() {
       {/* Upcoming task */}
       {!simple && nextTask && (
         <section>
-          <h2 className="text-[1.3rem] font-bold mb-3">{t("todayTasks")}</h2>
+          <h2 className="text-[1.15rem] font-bold mb-3">{t("todayTasks")}</h2>
           <Link to="/app/tasks" className="card p-4 flex items-center gap-4">
             <span
               className="w-14 h-14 rounded-2xl bg-soft grid place-items-center text-3xl"

@@ -88,6 +88,7 @@ export function StockAlarm() {
     ? rows.find(
         (m) =>
           m.active &&
+          !m.needs_confirmation &&
           m.stock_count != null &&
           m.stock_count <= (m.low_stock_threshold ?? 5) &&
           Date.now() >
@@ -143,7 +144,7 @@ export function StockAlarm() {
       .catch(() => {});
     if ("Notification" in window && Notification.permission === "granted")
       try {
-        new Notification("Nila", {
+        new Notification(t("appName"), {
           body: msg,
           requireInteraction: true,
           tag: "stock-" + med.id,

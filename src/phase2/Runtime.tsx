@@ -20,6 +20,9 @@ export function PhaseRuntime() {
     uid = profile!.id;
   const { consent, setConsent } = useLocationConsent(uid);
   const [flash, setFlash] = useState(false);
+  const [showTip, setShowTip] = useState(
+    () => localStorage.getItem(`nila.reminder-tip.${uid}`) !== "done",
+  );
   const lastPing = useRef(0);
   const { rows: zones } = useRows<{ id: string; lat: number; lng: number }>(
     "safe_zones",
@@ -109,7 +112,10 @@ export function PhaseRuntime() {
       toast(t("waterReminder"));
       if ("Notification" in window && Notification.permission === "granted")
         try {
-          new Notification("Nila", { body: t("waterReminder"), tag: "water" });
+          new Notification(t("appName"), {
+            body: t("waterReminder"),
+            tag: "water",
+          });
         } catch {}
     };
     void check();
@@ -143,6 +149,28 @@ export function PhaseRuntime() {
     contact = contacts.find((c) => c.is_sos);
   return (
     <>
+      {showTip && (
+        <aside className="card p-4 mx-auto max-w-2xl grid gap-2">
+          <p>{t("alarmTip")}</p>
+          {"Notification" in window &&
+            Notification.permission === "default" && (
+              <BigButton
+                variant="soft"
+                label={t("notifPermission")}
+                onClick={() => void Notification.requestPermission()}
+              />
+            )}
+          <button
+            className="min-h-12 text-primary"
+            onClick={() => {
+              localStorage.setItem(`nila.reminder-tip.${uid}`, "done");
+              setShowTip(false);
+            }}
+          >
+            {t("close")}
+          </button>
+        </aside>
+      )}
       {flash && (
         <div
           className="fixed inset-0 pointer-events-none z-[900] flash-anim"
@@ -207,6 +235,7 @@ export function HomeExtras() {
     name: string;
     phone: string;
     is_favourite: boolean;
+    needs_confirmation?: boolean;
   }>("contacts", profile!.id);
   const birthday = new Date().toLocaleDateString("en-CA", {
     month: "2-digit",
@@ -233,7 +262,7 @@ export function HomeExtras() {
       {s?.isOn("family_sos") &&
         s.features("family_sos").some((f) => f.key === "favourites") &&
         contacts
-          .filter((c) => c.is_favourite)
+          .filter((c) => c.is_favourite && !c.needs_confirmation)
           .map((c) => (
             <BigButton
               key={c.id}
@@ -245,19 +274,55 @@ export function HomeExtras() {
     </section>
   );
 }
+interface ZoneNotice {
+  id: string;
+  user_id: string;
+  type: string;
+  read: boolean;
+  data: { lat: number; lng: number; stock?: number };
+  message: string;
+}
 export function FamilyPhaseNotifications() {
   const { t } = useI18n(),
     toast = useToast();
+  const [zone, setZone] = useState<ZoneNotice | null>(null),
+    [phone, setPhone] = useState("");
   useEffect(() => {
     void supabase.rpc("check_water_intake");
+    void supabase
+      .from("alerts")
+      .select("*")
+      .in("type", ["zone_exit", "zone_return"])
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .then((r) => {
+        const a = r.data?.[0] as ZoneNotice | undefined;
+        if (a?.type === "zone_exit" && !a.read) setZone(a);
+      });
   }, []);
+  useEffect(() => {
+    setPhone("");
+    if (zone)
+      void supabase
+        .from("profiles")
+        .select("phone")
+        .eq("id", zone.user_id)
+        .maybeSingle()
+        .then((r) => setPhone(r.data?.phone || ""));
+  }, [zone?.user_id]);
+  useRealtime("location_sharing", (p) => {
+    const row = p.new as {
+      user_id: string;
+      enabled: boolean;
+      share_with_family: boolean;
+    };
+    if (row.user_id === zone?.user_id && !row.enabled) setZone(null);
+  });
   useRealtime("alerts", (p) => {
     if (p.eventType !== "INSERT") return;
-    const a = p.new as {
-      type: string;
-      message: string;
-      data: { stock?: number };
-    };
+    const a = p.new as ZoneNotice;
+    if (a.type === "zone_exit") setZone(a);
+    if (a.type === "zone_return" && a.user_id === zone?.user_id) setZone(null);
     const msg =
       a.type === "zone_exit"
         ? t("zoneExit")
@@ -271,8 +336,38 @@ export function FamilyPhaseNotifications() {
     toast(msg);
     if ("Notification" in window && Notification.permission === "granted")
       try {
-        new Notification("Nila", { body: msg, requireInteraction: true });
+        new Notification(t("appName"), { body: msg, requireInteraction: true });
       } catch {}
   });
-  return null;
+  return zone ? (
+    <aside
+      role="alert"
+      className="bg-danger text-white rounded-2xl p-4 grid gap-3"
+    >
+      <p className="text-xl font-bold">⚠️ {t("zoneExit")}</p>
+      <div className="flex flex-wrap gap-2">
+        {phone && (
+          <BigButton
+            variant="surface"
+            label={t("call")}
+            href={`tel:${phone}`}
+          />
+        )}
+        <BigButton
+          variant="surface"
+          label={t("openMap")}
+          href={`https://www.google.com/maps/dir/?api=1&destination=${zone.data.lat},${zone.data.lng}`}
+        />
+        <BigButton
+          variant="surface"
+          label={t("alarmAck")}
+          onClick={async () => {
+            const r = await supabase.rpc("handle_alert", { alert_id: zone.id });
+            if (r.error) toast(r.error.message, "error");
+            else setZone(null);
+          }}
+        />
+      </div>
+    </aside>
+  ) : null;
 }

@@ -41,11 +41,9 @@ export function SideShell({
         className={`portal-sidebar md:w-64 md:min-h-screen bg-surface border-r border-line md:block ${open ? "block" : "hidden"} md:sticky md:top-0`}
       >
         <div className="p-5 flex items-center gap-3 border-b border-line">
-          <img src="/icon.svg" alt="" className="w-10 h-10 rounded-xl" />
+          <img src="/icon-192.png" alt="" className="w-10 h-10 rounded-xl" />
           <div>
-            <p className="font-bold text-lg leading-tight">
-              {lang === "en" ? "Nila" : `${t("appName")} · Nila`}
-            </p>
+            <p className="font-bold text-lg leading-tight">{t("appName")}</p>
             <p className="text-sm text-muted">{title}</p>
           </div>
         </div>
@@ -124,7 +122,7 @@ export default function FamilyLayout() {
       const body = t("alertSos", { name, time: fmtTime(ev.created_at, lang) });
       if ("Notification" in window && Notification.permission === "granted") {
         try {
-          new Notification("🆘 Nila SOS", {
+          new Notification("🆘 Sa Hai SOS", {
             body,
             requireInteraction: true,
             icon: "/icon-192.png",
