@@ -29,7 +29,25 @@ export default defineConfig({
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/api\//],
         globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
-        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        // App shell is precached; large ML bundles (TensorFlow, Tesseract) are cached on first use.
+        maximumFileSizeToCacheInBytes: 380 * 1024,
+        runtimeCaching: [
+          {
+            urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith("/assets/"),
+            handler: "CacheFirst",
+            options: { cacheName: "nila-assets", expiration: { maxEntries: 80 } },
+          },
+          {
+            urlPattern: ({ url }) => url.hostname.endsWith("tile.openstreetmap.org"),
+            handler: "StaleWhileRevalidate",
+            options: { cacheName: "osm-tiles", expiration: { maxEntries: 300, maxAgeSeconds: 7 * 24 * 3600 } },
+          },
+          {
+            urlPattern: ({ url }) => url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com",
+            handler: "StaleWhileRevalidate",
+            options: { cacheName: "google-fonts" },
+          },
+        ],
       },
     }),
   ],
