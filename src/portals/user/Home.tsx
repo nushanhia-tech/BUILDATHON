@@ -62,8 +62,8 @@ export default function Home() {
       <header className="home-greeting flex items-start gap-3">
         <div className="flex-1">
           <p className="text-muted">{tod},</p>
-          <h1 className="text-[1.8rem] font-bold leading-tight">{t("greeting", { name: firstName })}</h1>
-          <p className="text-[1.3rem] text-primary font-semibold">{t("greetingSub")}</p>
+          <h1 className="text-[1.5rem] font-bold leading-snug">{t("greeting", { name: firstName })}</h1>
+          <p className="text-[1.1rem] text-primary font-semibold">{t("greetingSub")}</p>
         </div>
         <Link to="/app/settings" aria-label={t("navSettings")} className="shrink-0 w-16 h-16 rounded-full bg-soft grid place-items-center text-2xl font-bold text-primary border-4 border-surface shadow">
           {profile?.avatar_url ? <img src={profile.avatar_url} alt="" className="w-full h-full rounded-full object-cover" /> : (firstName[0] ?? "🙂")}
@@ -75,7 +75,7 @@ export default function Home() {
       <section className="hero voice-hero p-5 flex flex-col gap-3 relative overflow-hidden" aria-label={t("speakAsk")}>
         <div aria-hidden="true" className="absolute -right-6 -top-6 w-36 h-36 rounded-full bg-white/10" />
         <div aria-hidden="true" className="absolute right-5 top-5 text-5xl opacity-90">🎙️</div>
-        <h2 className="text-[1.4rem] font-bold pr-16">{t("speakAsk").replace("🎤 ", "")}</h2>
+        <h2 className="text-[1.2rem] font-bold pr-16">{t("speakAsk").replace("🎤 ", "")}</h2>
         {!simple && <p className="opacity-90 pr-16">{t("speakAskSub")}</p>}
         {stt.supported ? (
           <button type="button" onClick={() => (stt.listening ? stt.stop() : stt.start())} aria-pressed={stt.listening}
@@ -112,7 +112,7 @@ export default function Home() {
 
       {/* Modules — data-driven */}
       <section aria-labelledby="svc" className={vc.unknown ? "services-section ring-4 ring-warn rounded-3xl p-2 -m-2" : "services-section"}>
-        <h2 id="svc" className="text-[1.3rem] font-bold mb-3">{t("myServices")}</h2>
+        <h2 id="svc" className="text-[1.15rem] font-bold mb-3">{t("myServices")}</h2>
         {visible.length === 0 ? (
           <p className="card p-5 text-muted">{t("noModules")}</p>
         ) : (
@@ -122,7 +122,7 @@ export default function Home() {
               const sub = lang === "ml" && !simple ? m.label_en : undefined;
               return (
                 <BigButton key={m.key} variant="tile" icon={m.icon} accent={m.color} label={label} sub={sub}
-                  className={simple ? "min-h-28 !flex-row !justify-start text-[1.3rem]" : "min-h-40"}
+                  className={simple ? "min-h-24 !flex-row !justify-start text-[1.15rem]" : "min-h-32"}
                   to={isCustom(m.key) ? undefined : MODULE_ROUTES[m.key]}
                   href={isCustom(m.key) ? customHref(m.link_url) : undefined} />
               );
@@ -134,7 +134,7 @@ export default function Home() {
       {/* Upcoming task */}
       {!simple && nextTask && (
         <section>
-          <h2 className="text-[1.3rem] font-bold mb-3">{t("todayTasks")}</h2>
+          <h2 className="text-[1.15rem] font-bold mb-3">{t("todayTasks")}</h2>
           <Link to="/app/tasks" className="card p-4 flex items-center gap-4">
             <span className="w-14 h-14 rounded-2xl bg-soft grid place-items-center text-3xl" aria-hidden="true">📋</span>
             <span className="flex-1">

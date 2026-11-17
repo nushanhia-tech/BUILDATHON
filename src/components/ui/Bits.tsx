@@ -14,7 +14,7 @@ export function PageHeader({ title, help, back = "/app", icon, extra }: { title:
             ←
           </Link>
         )}
-        <h1 className="text-[1.6rem] font-bold leading-tight flex-1">
+        <h1 className="text-[1.4rem] font-bold leading-snug flex-1">
           {icon && <span aria-hidden="true" className="mr-2">{icon}</span>}
           {title}
         </h1>
@@ -101,7 +101,7 @@ export function Section({ title, children, action }: { title: string; children: 
   return (
     <section className="flex flex-col gap-3 mb-6">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-[1.3rem] font-bold">{title}</h2>
+        <h2 className="text-[1.15rem] font-bold">{title}</h2>
         {action}
       </div>
       {children}

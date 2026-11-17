@@ -41,6 +41,19 @@ function ThemeSync({ s }: { s: UserSettings | null }) {
   return null;
 }
 
+/** Switch Malayalam ⇄ English anytime after login; saved to the user's settings. */
+function LanguageToggle() {
+  const { lang, setLang, t } = useI18n();
+  const { save } = useUserSettings();
+  const next = lang === "ml" ? "en" : "ml";
+  return (
+    <button type="button" className="lang-toggle" aria-label={`${t("language")}: ${next === "en" ? "English" : "മലയാളം"}`}
+      onClick={() => { setLang(next); void save({ language: next }).catch(() => {}); }}>
+      🌐 {next === "en" ? "English" : "മലയാളം"}
+    </button>
+  );
+}
+
 function UserShell() {
   const { settings, loaded, isOn } = useUserSettings();
   const { t } = useI18n();
@@ -59,7 +72,10 @@ function UserShell() {
     <div className="user-shell min-h-screen">
       <ThemeSync s={settings} />
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-surface p-3 rounded-xl z-50">Skip</a>
-      <div className="user-brand brand"><span className="brand-symbol" aria-hidden="true">✦</span> {t("appName") === "Nila" ? "Nila" : `${t("appName")} · Nila`}</div>
+      <div className="user-topbar">
+        <div className="user-brand brand"><span className="brand-symbol" aria-hidden="true">✦</span> {t("appName") === "Nila" ? "Nila" : `${t("appName")} · Nila`}</div>
+        <LanguageToggle />
+      </div>
       <main id="main" className={`user-main mx-auto w-full px-4 pt-5 ${onboarding ? "pb-10" : "safe-bottom"}`}>
         <Outlet />
       </main>
@@ -69,7 +85,7 @@ function UserShell() {
             {tabs.map((tab) => (
               <li key={tab.to} className="flex-1">
                 <NavLink to={tab.to} end={tab.end} className={({ isActive }) =>
-                  `min-h-20 flex flex-col items-center justify-center gap-0.5 font-semibold text-base ${isActive ? "text-primary" : "text-muted"}`}>
+                  `min-h-16 flex flex-col items-center justify-center gap-0.5 font-semibold text-sm ${isActive ? "text-primary" : "text-muted"}`}>
                   <span aria-hidden="true" className="text-2xl">{tab.icon}</span>
                   {tab.label}
                 </NavLink>
