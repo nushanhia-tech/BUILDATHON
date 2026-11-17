@@ -11,6 +11,9 @@ export default function AdminLayout() {
     { to: "/admin/content", label: t("admContent") },
     { to: "/admin/wheelchairs", label: t("admWheelchairs") },
     { to: "/admin/users", label: t("admUsers") },
+    { to: "/admin/volunteers", label: t("volunteerTitle") },
+    { to: "/admin/help-requests", label: t("myRequests") },
+    { to: "/admin/stories", label: t("moderation") },
     { to: "/admin/reports", label: t("admReports") },
   ];
   return (

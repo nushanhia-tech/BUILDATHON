@@ -202,3 +202,12 @@ html.hc .module-icon { border-color: #ff0; box-shadow: none; }
 @media(prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } .tile:hover { transform: none; } }
 .user-main.safe-bottom { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); }
 @media(min-width: 1024px) { .user-main.safe-bottom { padding-bottom: 2rem; } }
+.water-glass { position: relative; width: 120px; height: 170px; border: 5px solid var(--primary); border-top-width: 2px; border-radius: 8px 8px 35px 35px; overflow: hidden; background: var(--soft); }
+.water-glass > div { position: absolute; bottom: 0; width: 100%; background: linear-gradient(#a9a1f4,#6d67c9); transition: height .6s ease; }
+.sharing-banner { position: sticky; top: .5rem; z-index: 45; background: var(--surface); }
+/* Allow long Malayalam labels to wrap inside narrow grid tracks. */
+.user-main, .portal-main { min-width: 0; overflow-wrap: anywhere; }
+.user-main .grid > *, .portal-main .grid > * { min-width: 0; }
+fieldset { min-inline-size: 0; }
+legend { max-width: 100%; }
+h1, h2, .card details { min-width: 0; }
