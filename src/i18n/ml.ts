@@ -1,6 +1,6 @@
 // Malayalam UI strings (default language). Keys are shared with en.ts.
 export const ml = {
-  appName: "നിള",
+  appName: "Sa Hai",
   tagline: "സാങ്കേതികവിദ്യ ആളുകൾക്ക് അനുസരിച്ച്",
   ok: "ശരി",
   cancel: "വേണ്ട",
@@ -318,7 +318,7 @@ export const ml = {
   sendRequest: "അപേക്ഷ അയക്കൂ",
   requestSent: "അപേക്ഷ അയച്ചു. ഉടമ സ്വീകരിച്ചാൽ ഫോൺ നമ്പറും കൃത്യമായ സ്ഥലവും കാണാം.",
   phoneAfterAccept: "ഉടമ അപേക്ഷ സ്വീകരിച്ച ശേഷം ഫോൺ നമ്പർ കാണാം.",
-  waPrefill: "നമസ്കാരം, Nila-യിൽ കണ്ട വീൽചെയർ ലഭ്യമാണോ?",
+  waPrefill: "നമസ്കാരം, Sa Hai-യിൽ കണ്ട വീൽചെയർ ലഭ്യമാണോ?",
   directions: "🧭 വഴി കാണിക്കൂ",
   approxLocation: "ഏകദേശ സ്ഥലം മാത്രം (സ്വകാര്യതയ്ക്കായി)",
   exactLocation: "കൃത്യമായ സ്ഥലം",

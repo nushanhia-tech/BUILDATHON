@@ -1,7 +1,7 @@
 import type { StringKey } from "./ml";
 
 export const en: Record<StringKey, string> = {
-  appName: "Nila",
+  appName: "Sa Hai",
   tagline: "Technology that adapts to people",
   ok: "OK",
   cancel: "Cancel",
@@ -308,7 +308,7 @@ export const en: Record<StringKey, string> = {
   sendRequest: "Send request",
   requestSent: "Request sent. Once the owner accepts, you'll see their phone number and the exact location.",
   phoneAfterAccept: "The phone number is shown after the owner accepts your request.",
-  waPrefill: "Hello, is the wheelchair I saw on Nila available?",
+  waPrefill: "Hello, is the wheelchair I saw on Sa Hai available?",
   directions: "🧭 Directions",
   approxLocation: "Approximate location only (for privacy)",
   exactLocation: "Exact location",

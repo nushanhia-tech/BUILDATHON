@@ -73,7 +73,7 @@ function UserShell() {
       <ThemeSync s={settings} />
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-surface p-3 rounded-xl z-50">Skip</a>
       <div className="user-topbar">
-        <div className="user-brand brand"><span className="brand-symbol" aria-hidden="true">✦</span> {t("appName") === "Nila" ? "Nila" : `${t("appName")} · Nila`}</div>
+        <div className="user-brand brand"><img src="/icon-192.png" alt="" className="brand-logo" /> Sa Hai</div>
         <LanguageToggle />
       </div>
       <main id="main" className={`user-main mx-auto w-full px-4 pt-5 ${onboarding ? "pb-10" : "safe-bottom"}`}>

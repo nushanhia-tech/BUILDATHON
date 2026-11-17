@@ -822,7 +822,7 @@ insert into public.helplines (name_ml, name_en, phone, category) values
 
 -- =====================================================================
 -- SEED: demo accounts (password for all: NilaDemo@123)
---   admin@nila.demo  — admin (also owns the DEMO wheelchair listings as "Nila Demo Org")
+--   admin@nila.demo  — admin (also owns the DEMO wheelchair listings as "Sa Hai Demo Org")
 --   user@nila.demo   — Ummah, Simple Mode
 --   family@nila.demo — Abdul (son), linked to user@ with level 'full'
 -- =====================================================================
@@ -836,7 +836,7 @@ declare
   rec record;
 begin
   for rec in select * from (values
-      (v_admin, 'admin@nila.demo',  'Nila Demo Org (ഡെമോ)', 'family'),
+      (v_admin, 'admin@nila.demo',  'Sa Hai Demo Org (ഡെമോ)', 'family'),
       (v_user,  'user@nila.demo',   'ഉമ്മ (Ummah)',          'user'),
       (v_fam,   'family@nila.demo', 'അബ്ദുൾ (Abdul)',        'family')) as v(id, email, name, role)
   loop

@@ -22,20 +22,20 @@ function AuthShell({ title, sub, children }: { title: string; sub: string; child
   const { t, lang } = useI18n();
   return (
     <main className="auth-page">
-      <section className="auth-story" aria-label="Nila">
-        <a className="brand" href="/"><span className="brand-symbol" aria-hidden="true">✦</span> {lang === "en" ? "Nila" : `${t("appName")} · Nila`}</a>
+      <section className="auth-story" aria-label="Sa Hai">
+        <a className="brand" href="/"><img src="/icon-192.png" alt="" className="brand-logo" /> Sa Hai</a>
         <div className="auth-story-copy">
           <p className="eyebrow">{lang === "en" ? "A LITTLE HELP. EVERY DAY." : "ഓരോ ദിവസവും, നിങ്ങൾക്കൊപ്പം"}</p>
           <h2>{lang === "en" ? <>Your day.<br />A little easier.</> : <>നിങ്ങളുടെ ദിവസം.<br />കൂടുതൽ എളുപ്പം.</>}</h2>
           <p>{t("tagline")}</p>
         </div>
-        <div className="care-illustration" aria-hidden="true"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><span className="care-orb">✦</span><span className="floating-token token-one">♡</span><span className="floating-token token-two">✧</span><span className="floating-token token-three">♫</span></div>
-        <div className="auth-story-foot"><span>01 — NILA</span><span>{lang === "en" ? "Made for you" : "നിങ്ങൾക്കായി"} ↗</span></div>
+        <div className="care-illustration" aria-hidden="true"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><img src="/logo.png" alt="" className="care-logo" /><span className="floating-token token-one">♡</span><span className="floating-token token-two">✧</span><span className="floating-token token-three">♫</span></div>
+        <div className="auth-story-foot"><span>Sa Hai · സഹായ്</span><span>{lang === "en" ? "Made for you" : "നിങ്ങൾക്കായി"} ↗</span></div>
       </section>
       <section className="auth-panel">
         <div className="auth-language"><LangSwitch /></div>
         <div className="auth-form-wrap">
-          <div className="auth-heading"><span className="auth-mark" aria-hidden="true">✦</span><p className="eyebrow">{lang === "en" ? "WELCOME TO NILA" : `${t("appName")} · NILA`}</p><h1>{title}</h1><p className="text-muted">{sub}</p></div>
+          <div className="auth-heading"><img src="/icon-192.png" alt="" className="auth-mark auth-logo" /><p className="eyebrow">{lang === "en" ? "WELCOME TO SA HAI" : "Sa Hai · സഹായ്"}</p><h1>{title}</h1><p className="text-muted">{sub}</p></div>
           {!supabaseConfigured && <p role="status" className="setup-notice">{t("setupMissing")}</p>}
           <div className="auth-form">{children}</div>
           <p className="auth-footer">{t("tagline")}</p>
