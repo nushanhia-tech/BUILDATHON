@@ -10,6 +10,7 @@ import { fmtTime } from "../../lib/time";
 import { mapsLink } from "../../lib/geo";
 import { Badge, Spinner } from "../../components/ui/Bits";
 import { configureTts } from "../../lib/tts";
+import { Icon, IconLabel } from "../../components/ui/Icon";
 
 export function useDesktopTheme() {
   useEffect(() => {
@@ -58,7 +59,7 @@ export function SideShell({
                 `min-h-12 px-4 rounded-xl flex items-center font-semibold ${isActive ? "bg-primary text-on-primary" : "hover:bg-soft"}`
               }
             >
-              {n.label}
+              <IconLabel label={n.label} size={20} />
             </NavLink>
           ))}
         </nav>
@@ -66,14 +67,16 @@ export function SideShell({
           <p className="text-sm text-muted px-2">{profile?.name}</p>
           <button
             onClick={() => setLang(lang === "ml" ? "en" : "ml")}
-            className="min-h-12 rounded-xl bg-soft font-semibold"
+            className="min-h-11 rounded-xl bg-soft font-semibold inline-flex items-center justify-center gap-2"
           >
-            🌐 {lang === "ml" ? "English" : "മലയാളം"}
+            <Icon name="globe" size={18} />
+            {lang === "ml" ? "English" : "മലയാളം"}
           </button>
           <button
             onClick={() => void signOut()}
-            className="min-h-12 rounded-xl border-2 border-line font-semibold"
+            className="min-h-11 rounded-xl border border-line font-semibold text-danger inline-flex items-center justify-center gap-2"
           >
+            <Icon name="logout" size={18} />
             {t("logout")}
           </button>
         </div>
@@ -87,9 +90,9 @@ export function SideShell({
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
             aria-label="Menu"
-            className="min-h-12 min-w-12 rounded-xl bg-soft text-xl"
+            className="min-h-11 min-w-11 rounded-xl bg-soft grid place-items-center"
           >
-            ☰
+            <Icon name="list" size={22} />
           </button>
         </div>
         {banner}
@@ -226,7 +229,14 @@ export function FamilyUserScope() {
       }}
     >
       <div className="flex flex-wrap items-center gap-3 mb-4">
-        <h1 className="text-2xl font-bold">👤 {l.profile?.name}</h1>
+        <h1 className="text-2xl font-bold">
+          <Icon
+            name="user"
+            size={18}
+            className="inline-block align-[-0.25em] mr-1.5"
+          />
+          {l.profile?.name}
+        </h1>
         <Badge
           tone={
             level === "full" ? "success" : level === "assist" ? "warn" : "soft"

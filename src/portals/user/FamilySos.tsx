@@ -16,6 +16,7 @@ import { ContactsManager, useContacts } from "../../components/managers/Contacts
 import { EmergencyCardView, EmergencyEditor, useEmergencyInfo } from "../../components/managers/EmergencyCard";
 import { MessageThread } from "../../components/managers/Messages";
 import type { Checkin, Helpline } from "../../lib/types";
+import { Icon } from "../../components/ui/Icon";
 
 export default function FamilySos() {
   const { t } = useI18n();
@@ -66,18 +67,18 @@ function SosBlock({ openInitially, onOpened }: { openInitially: boolean; onOpene
   return (
     <section className="mb-6 flex flex-col gap-3" aria-label="SOS">
       <button type="button" disabled={busy} onClick={() => setConfirm(true)} aria-label={`${t("sos")} — ${t("sosBig")}`}
-        className="sos-pulse w-full min-h-40 rounded-[2rem] bg-danger text-on-danger font-extrabold flex flex-col items-center justify-center gap-1 shadow-[0_16px_40px_rgba(220,38,38,.4)]">
-        <span className="text-5xl" aria-hidden="true">🆘</span>
-        <span className="text-[2rem]">{busy ? t("loading") : t("sosBig")}</span>
+        className="sos-pulse w-full min-h-28 rounded-[1.75rem] bg-danger text-on-danger font-extrabold flex flex-col items-center justify-center gap-1 shadow-[0_16px_40px_rgba(220,38,38,.4)]">
+        <span className="text-5xl" aria-hidden="true"><Icon name="sos" size={40} /></span>
+        <span className="text-[1.5rem]">{busy ? t("loading") : t("sosBig")}</span>
       </button>
-      <p className="card p-4 border-l-8 border-danger font-semibold" role="note">⚠️ {t("notEmergency")}</p>
+      <p className="card p-4 border-l-8 border-danger font-semibold" role="note"><Icon name="alert" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("notEmergency")}</p>
       <div className="grid grid-cols-2 gap-3">
         <BigButton variant="danger" label={t("call112")} href="tel:112" />
         <BigButton variant="danger" label={t("call108")} href="tel:108" />
       </div>
       {sent && (
         <div className="card p-4 flex flex-col gap-3 border-4 border-danger" role="alert">
-          <p className="font-bold text-[1.2rem]">✔️ {t("sosSent")}</p>
+          <p className="font-bold text-[1.2rem]"><Icon name="check" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("sosSent")}</p>
           <p className="text-muted">{msg}</p>
           {sosContacts.map((c) => (
             <div key={c.id} className="grid grid-cols-2 gap-2">
@@ -109,7 +110,7 @@ function CheckinBlock() {
   if (today === undefined) return <Spinner />;
   return (
     <section className="mb-6 flex flex-col gap-2">
-      <BigButton variant="success" label={t("imFine")} className="min-h-24 text-[1.5rem]" onClick={checkin} />
+      <BigButton variant="success" label={t("imFine")} className="min-h-14 text-[1.05rem]" onClick={checkin} />
       {today && <p className="card p-3 text-success font-bold text-center" aria-live="polite">{t("checkedInAt", { time: fmtTime(today.created_at, lang) })}</p>}
     </section>
   );

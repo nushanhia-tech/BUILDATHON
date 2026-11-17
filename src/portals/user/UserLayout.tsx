@@ -27,6 +27,8 @@ import { PhaseRuntime } from "../../phase2/Runtime";
 import { StockAlarm } from "../../phase2/Stock";
 import { NavIcon } from "../../components/ui/NavIcon";
 import { Spinner } from "../../components/ui/Bits";
+import { Icon } from "../../components/ui/Icon";
+import { LogoutButton } from "../../components/ui/LogoutButton";
 
 export default function UserLayout() {
   const { profile } = useAuth();
@@ -74,7 +76,7 @@ function LanguageToggle() {
         void save({ language: next }).catch(() => {});
       }}
     >
-      🌐 {next === "en" ? "English" : "മലയാളം"}
+      <Icon name="globe" size={18} /> {next === "en" ? "English" : "മലയാളം"}
     </button>
   );
 }
@@ -131,7 +133,10 @@ function UserShell() {
         <div className="user-brand brand">
           <img src="/icon-192.png" alt="" className="brand-logo" /> Sa Hai
         </div>
-        <LanguageToggle />
+        <div className="flex items-center gap-2">
+          <LanguageToggle />
+          {loc.pathname === "/app" && <LogoutButton />}
+        </div>
       </div>
       <PhaseRuntime />
       <main
@@ -152,9 +157,7 @@ function UserShell() {
                     `min-h-16 flex flex-col items-center justify-center gap-0.5 font-semibold text-sm ${isActive ? "text-primary" : "text-muted"}`
                   }
                 >
-                  <span aria-hidden="true" className="text-2xl">
-                    {tab.icon}
-                  </span>
+                  <span aria-hidden="true">{tab.icon}</span>
                   {tab.label}
                 </NavLink>
               </li>
@@ -302,7 +305,7 @@ function MedicineReminder() {
           </button>
           <button
             onClick={take}
-            className="min-h-20 rounded-3xl bg-success text-white font-bold text-xl"
+            className="min-h-14 rounded-2xl bg-success text-white font-bold text-xl"
           >
             {t("taken")}
           </button>
@@ -412,9 +415,9 @@ function LinkApprovalPrompt() {
     >
       <div className="card w-full max-w-md p-6 flex flex-col gap-4">
         <p className="text-5xl text-center" aria-hidden="true">
-          👨‍👩‍👧
+          <Icon name="family" size={40} />
         </p>
-        <h2 id="link-title" className="text-[1.4rem] font-bold text-center">
+        <h2 id="link-title" className="text-[1.15rem] font-bold text-center">
           {t("linkRequest", { name: link.fam?.name ?? t("someone") })}
         </h2>
         <p className="font-semibold">{t("chooseLevel")}</p>
@@ -440,13 +443,13 @@ function LinkApprovalPrompt() {
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={() => answer(false)}
-            className="min-h-20 rounded-3xl bg-soft font-bold text-xl border-2 border-line"
+            className="min-h-14 rounded-2xl bg-soft font-semibold border border-line"
           >
             {t("deny")}
           </button>
           <button
             onClick={() => answer(true)}
-            className="min-h-20 rounded-3xl bg-primary text-on-primary font-bold text-xl"
+            className="min-h-14 rounded-2xl bg-primary text-on-primary font-bold text-xl"
           >
             {t("allow")}
           </button>

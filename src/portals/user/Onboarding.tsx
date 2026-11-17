@@ -17,6 +17,7 @@ import { ReadAloudButton } from "../../components/ui/ReadAloudButton";
 import { errMsg, useToast } from "../../hooks/useToast";
 import { speak } from "../../lib/tts";
 import type { Mode } from "../../lib/types";
+import { Icon, iconFor } from "../../components/ui/Icon";
 
 export default function Onboarding() {
   const { t, setLang } = useI18n();
@@ -134,7 +135,7 @@ export default function Onboarding() {
           style={{ width: `${(step / 3) * 100}%` }}
         />
       </div>
-      <h1 className="text-[1.8rem] font-bold leading-tight">
+      <h1 className="text-[1.4rem] font-bold leading-snug">
         {titles[step - 1]}
       </h1>
       <p className="text-muted -mt-3">{subs[step - 1]}</p>
@@ -161,10 +162,17 @@ export default function Onboarding() {
                     on ? needs.filter((n) => n !== c.key) : [...needs, c.key],
                   )
                 }
-                className={`min-h-28 rounded-3xl p-4 flex items-center gap-4 text-left font-bold border-4 transition ${on ? "border-primary bg-soft" : "border-transparent card"}`}
+                className={`min-h-20 rounded-2xl p-3 flex items-center gap-3 text-left font-semibold border-2 transition ${on ? "border-primary bg-soft" : "border-transparent card"}`}
               >
-                <span className="text-5xl" aria-hidden="true">
-                  {c.icon}
+                <span
+                  className="w-14 h-14 rounded-2xl bg-soft text-primary grid place-items-center shrink-0"
+                  aria-hidden="true"
+                >
+                  {iconFor(c.icon) ? (
+                    <Icon name={iconFor(c.icon)!} size={30} />
+                  ) : (
+                    c.icon
+                  )}
                 </span>
                 <span className="flex-1">{c.label}</span>
                 <span
@@ -193,7 +201,7 @@ export default function Onboarding() {
           type="button"
           disabled={step === 1}
           onClick={() => setStep(step - 1)}
-          className="min-h-20 rounded-3xl card font-bold text-xl disabled:opacity-40"
+          className="min-h-14 rounded-2xl card font-semibold text-xl disabled:opacity-40"
         >
           ← {t("back")}
         </button>
@@ -201,7 +209,7 @@ export default function Onboarding() {
           <button
             type="button"
             onClick={() => (step === 1 ? goModules() : setStep(3))}
-            className="min-h-20 rounded-3xl bg-primary text-on-primary font-bold text-xl"
+            className="min-h-14 rounded-2xl bg-primary text-on-primary font-bold text-xl"
           >
             {t("next")} →
           </button>
@@ -210,9 +218,14 @@ export default function Onboarding() {
             type="button"
             disabled={busy}
             onClick={() => finish()}
-            className="min-h-20 rounded-3xl bg-success text-white font-bold text-xl"
+            className="min-h-14 rounded-2xl bg-success text-white font-bold text-xl"
           >
-            ✔️ {t("obFinish")}
+            <Icon
+              name="check"
+              size={18}
+              className="inline-block align-[-0.25em] mr-1.5"
+            />
+            {t("obFinish")}
           </button>
         )}
       </div>

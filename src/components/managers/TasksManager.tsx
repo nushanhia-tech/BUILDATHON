@@ -12,6 +12,7 @@ import { BigButton } from "../ui/BigButton";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { VoiceInput } from "../ui/VoiceInput";
 import { useNames } from "./useNames";
+import { Icon } from "../ui/Icon";
 
 export function TasksManager({ userId, actor, level = "full" }: { userId: string; actor: "user" | "family"; level?: LinkLevel }) {
   const { t, lang } = useI18n();
@@ -56,10 +57,10 @@ export function TasksManager({ userId, actor, level = "full" }: { userId: string
         className={`min-h-16 min-w-16 rounded-2xl text-2xl font-bold border-4 ${x.done ? "bg-success text-white border-success" : "border-line"}`}>{x.done ? "✓" : ""}</button>
       <div className="flex-1 min-w-0">
         <p className={`font-bold ${x.done ? "line-through" : ""}`}>{x.title}</p>
-        {x.due_at && <p className="text-base text-muted">🕒 {fmtDateTime(x.due_at, lang)}</p>}
+        {x.due_at && <p className="text-base text-muted"><Icon name="clock" size={18} className="inline-block align-[-0.25em] mr-1.5" />{fmtDateTime(x.due_at, lang)}</p>}
         {x.added_by && x.added_by !== userId && <p className="text-sm text-muted">+ {names[x.added_by] ?? ""}</p>}
       </div>
-      {canEdit && <button type="button" onClick={() => setDel(x)} aria-label={`${t("delete")}: ${x.title}`} className="min-h-14 min-w-14 rounded-2xl bg-soft text-danger">🗑️</button>}
+      {canEdit && <button type="button" onClick={() => setDel(x)} aria-label={`${t("delete")}: ${x.title}`} className="min-h-14 min-w-14 rounded-2xl bg-soft text-danger"><Icon name="trash" size={20} /></button>}
     </li>
   );
 
@@ -68,14 +69,14 @@ export function TasksManager({ userId, actor, level = "full" }: { userId: string
       {actor === "user" && pending.map((x) => (
         <div key={x.id} role="alert" className="card p-4 mb-4 border-l-8 border-warn flex flex-col gap-3">
           <p className="font-bold">{t("familyAddedTask", { who: names[x.added_by ?? ""] ?? t("someone") })}</p>
-          <p className="text-[1.3rem]">📋 {x.title}{x.due_at ? ` · ${fmtDateTime(x.due_at, lang)}` : ""}</p>
+          <p className="text-[1.3rem]"><Icon name="list" size={18} className="inline-block align-[-0.25em] mr-1.5" />{x.title}{x.due_at ? ` · ${fmtDateTime(x.due_at, lang)}` : ""}</p>
           <div className="grid grid-cols-2 gap-2">
             <BigButton variant="surface" label={t("rejectItem")} onClick={() => void confirm(x, false)} />
             <BigButton variant="success" label={t("confirmItem")} onClick={() => void confirm(x, true)} />
           </div>
         </div>
       ))}
-      {actor === "family" && pending.length > 0 && <p className="card p-3 mb-3 text-warn">⏳ {pending.length} · {t("pendingApprovalBadge")}</p>}
+      {actor === "family" && pending.length > 0 && <p className="card p-3 mb-3 text-warn"><Icon name="hourglass" size={18} className="inline-block align-[-0.25em] mr-1.5" />{pending.length} · {t("pendingApprovalBadge")}</p>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
         {canAdd && <BigButton label={t("addTask")} onClick={() => setAdding(true)} />}
         <BigButton variant="soft" label={t("readTodayTasks")} onClick={readToday} />
@@ -152,8 +153,8 @@ export function MemoryNotes({ userId }: { userId: string }) {
           {list.map((n) => (
             <li key={n.id} className="card p-3 flex items-center gap-3">
               <span className="flex-1"><span className="block font-semibold text-[1.15rem]">{n.text}</span><span className="block text-sm text-muted">{fmtDateTime(n.created_at, lang)}</span></span>
-              <button type="button" onClick={() => speak(n.text, { force: true })} aria-label={`${t("readAloud")}: ${n.text}`} className="min-h-14 min-w-14 rounded-2xl bg-soft">🔊</button>
-              <button type="button" onClick={() => setDel(n)} aria-label={t("delete")} className="min-h-14 min-w-14 rounded-2xl bg-soft text-danger">🗑️</button>
+              <button type="button" onClick={() => speak(n.text, { force: true })} aria-label={`${t("readAloud")}: ${n.text}`} className="min-h-14 min-w-14 rounded-2xl bg-soft"><Icon name="speaker" size={20} /></button>
+              <button type="button" onClick={() => setDel(n)} aria-label={t("delete")} className="min-h-14 min-w-14 rounded-2xl bg-soft text-danger"><Icon name="trash" size={20} /></button>
             </li>
           ))}
         </ul>

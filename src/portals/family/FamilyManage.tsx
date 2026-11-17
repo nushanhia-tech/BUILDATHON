@@ -55,6 +55,7 @@ import {
   wcStatus,
   wcType,
 } from "../user/wheelchair/wcLabels";
+import { Icon } from "../../components/ui/Icon";
 
 /** /family/u/:userId/:section — manage one function of a linked user (permission-aware). */
 export default function FamilyManage() {
@@ -62,7 +63,14 @@ export default function FamilyManage() {
   const { t } = useI18n();
   const { userId, level, canFull } = useFamilyScope();
   const readOnly = level === "view" && (
-    <p className="card p-3 mb-4 text-muted">👀 {t("famReadOnly")}</p>
+    <p className="card p-3 mb-4 text-muted">
+      <Icon
+        name="eye"
+        size={18}
+        className="inline-block align-[-0.25em] mr-1.5"
+      />
+      {t("famReadOnly")}
+    </p>
   );
   switch (section) {
     case "water":
@@ -98,7 +106,14 @@ export default function FamilyManage() {
       );
     case "contacts":
       return level === "view" ? (
-        <p className="card p-5 text-warn">🔒 {t("famReadOnly")}</p>
+        <p className="card p-5 text-warn">
+          <Icon
+            name="lock"
+            size={18}
+            className="inline-block align-[-0.25em] mr-1.5"
+          />
+          {t("famReadOnly")}
+        </p>
       ) : (
         <ContactsManager userId={userId} actor="family" level={level} />
       );
@@ -122,7 +137,16 @@ function EmergencySection() {
   const { contacts } = useContacts(userId);
   const [show, setShow] = useState(false);
   if (level === "view")
-    return <p className="card p-5 text-warn">🔒 {t("famReadOnly")}</p>;
+    return (
+      <p className="card p-5 text-warn">
+        <Icon
+          name="lock"
+          size={18}
+          className="inline-block align-[-0.25em] mr-1.5"
+        />
+        {t("famReadOnly")}
+      </p>
+    );
   if (info === undefined) return <Spinner />;
   return (
     <div className="max-w-xl flex flex-col gap-4">
@@ -142,7 +166,14 @@ function EmergencySection() {
           />
         </div>
       ) : (
-        <p className="card p-3 text-muted">🔒 {t("famNeedFull")}</p>
+        <p className="card p-3 text-muted">
+          <Icon
+            name="lock"
+            size={18}
+            className="inline-block align-[-0.25em] mr-1.5"
+          />
+          {t("famNeedFull")}
+        </p>
       )}
       {show && (
         <EmergencyCardView
@@ -181,14 +212,12 @@ function HearingSection() {
   }, [settings]);
   const add = async () => {
     if (!ml.trim()) return;
-    const { error } = await supabase
-      .from("quick_phrases")
-      .insert({
-        user_id: userId,
-        text_ml: ml.trim(),
-        text_en: en.trim() || null,
-        icon: "💬",
-      });
+    const { error } = await supabase.from("quick_phrases").insert({
+      user_id: userId,
+      text_ml: ml.trim(),
+      text_en: en.trim() || null,
+      icon: "💬",
+    });
     if (error) toast(error.message, "error");
     else {
       setMl("");
@@ -220,7 +249,7 @@ function HearingSection() {
                     aria-label={t("delete")}
                     className="min-h-11 min-w-11 rounded-xl bg-soft text-danger"
                   >
-                    🗑️
+                    <Icon name="trash" size={20} />
                   </button>
                 )}
               </li>
@@ -273,7 +302,14 @@ function HearingSection() {
                 {t("save")}
               </button>
             ) : (
-              <p className="text-muted">🔒 {t("famNeedFull")}</p>
+              <p className="text-muted">
+                <Icon
+                  name="lock"
+                  size={18}
+                  className="inline-block align-[-0.25em] mr-1.5"
+                />
+                {t("famNeedFull")}
+              </p>
             )}
           </div>
         )}
@@ -331,7 +367,16 @@ function CheckinSection() {
             </button>
           )}
         </div>
-        {!canFull && <p className="text-muted">🔒 {t("famNeedFull")}</p>}
+        {!canFull && (
+          <p className="text-muted">
+            <Icon
+              name="lock"
+              size={18}
+              className="inline-block align-[-0.25em] mr-1.5"
+            />
+            {t("famNeedFull")}
+          </p>
+        )}
       </Section>
       <Section title={t("checkinHistory")}>
         {history.length === 0 ? (
@@ -340,7 +385,12 @@ function CheckinSection() {
           <ul className="card divide-y divide-line">
             {history.map((c) => (
               <li key={c.id} className="p-3">
-                💚 {fmtDateTime(c.created_at, lang)}
+                <Icon
+                  name="heart"
+                  size={18}
+                  className="inline-block align-[-0.25em] mr-1.5"
+                />
+                {fmtDateTime(c.created_at, lang)}
               </li>
             ))}
           </ul>
@@ -378,15 +428,13 @@ function WheelchairSection() {
   }, [load]);
   const send = async () => {
     setConfirm(false);
-    const { error } = await supabase
-      .from("wheelchair_requests")
-      .insert({
-        wheelchair_id: target!.id,
-        seeker_id: userId,
-        reason,
-        days_needed: Number(days) || 7,
-        message: message || null,
-      });
+    const { error } = await supabase.from("wheelchair_requests").insert({
+      wheelchair_id: target!.id,
+      seeker_id: userId,
+      reason,
+      days_needed: Number(days) || 7,
+      message: message || null,
+    });
     if (error) toast(error.message, "error");
     else {
       toast(t("requestSent"), "success");
@@ -416,14 +464,19 @@ function WheelchairSection() {
       </Section>
       <Section title={t("requestOnBehalf")}>
         {!canFull ? (
-          <p className="card p-3 text-warn">🔒 {t("famNeedFull")}</p>
+          <p className="card p-3 text-warn">
+            <Icon
+              name="lock"
+              size={18}
+              className="inline-block align-[-0.25em] mr-1.5"
+            />
+            {t("famNeedFull")}
+          </p>
         ) : (
           <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {list.map((w) => (
               <li key={w.id} className="card p-4 flex flex-col gap-2">
-                <p className="font-bold">
-                  {TYPE_ICON[w.type]} {wcType(t, w.type)}
-                </p>
+                <p className="font-bold">{wcType(t, w.type)}</p>
                 <p className="text-muted">
                   {wcOffer(t, w.offer)} · 📍 {w.place_name} ·{" "}
                   {formatKm(

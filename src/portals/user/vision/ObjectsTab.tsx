@@ -3,6 +3,7 @@ import { useI18n } from "../../../lib/i18n";
 import { useCamera } from "../../../hooks/useCamera";
 import { speak } from "../../../lib/tts";
 import { CameraBox } from "./CameraBox";
+import { Icon } from "../../../components/ui/Icon";
 
 /** COCO-SSD label → Malayalam (40+ common objects). */
 export const COCO_ML: Record<string, string> = {
@@ -68,7 +69,7 @@ export function ObjectsTab() {
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="card p-4 bg-amber-50 text-warn font-bold" role="note">⚠️ {t("objectsDisclaimer")}</p>
+      <p className="card p-4 bg-amber-50 text-warn font-bold" role="note"><Icon name="alert" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("objectsDisclaimer")}</p>
       <p className="text-muted">{t("objectsHelp")}</p>
       <CameraBox videoRef={cam.videoRef} active={cam.active} error={cam.error} onStart={() => void cam.start()} onStop={cam.stop}
         overlay={cam.active && (

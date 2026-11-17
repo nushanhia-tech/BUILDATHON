@@ -23,17 +23,17 @@ export function ConfirmDialog({ open, title, body, danger, okLabel, cancelLabel,
   return (
     <div className="fixed inset-0 z-[900] bg-black/60 grid place-items-center p-4" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
       <div className="card w-full max-w-md p-6 flex flex-col gap-5">
-        <h2 id="confirm-title" className="text-[1.4rem] font-bold">{title ?? t("confirmTitle")}</h2>
+        <h2 id="confirm-title" className="text-[1.2rem] font-bold">{title ?? t("confirmTitle")}</h2>
         {body && <div className="text-lg">{body}</div>}
         <div className="grid grid-cols-2 gap-3">
-          <button type="button" onClick={onCancel} className="min-h-20 rounded-3xl bg-soft text-ink font-bold text-[1.3rem] border-2 border-line">
+          <button type="button" onClick={onCancel} className="min-h-14 rounded-2xl bg-soft text-ink font-semibold text-[1.05rem] border-2 border-line">
             {cancelLabel ?? t("cancel")}
           </button>
           <button
             ref={okRef}
             type="button"
             onClick={onOk}
-            className={`min-h-20 rounded-3xl font-bold text-[1.3rem] ${danger ? "bg-danger text-on-danger" : "bg-primary text-on-primary"}`}
+            className={`min-h-14 rounded-2xl font-semibold text-[1.05rem] ${danger ? "bg-danger text-on-danger" : "bg-primary text-on-primary"}`}
           >
             {okLabel ?? t("ok")}
           </button>

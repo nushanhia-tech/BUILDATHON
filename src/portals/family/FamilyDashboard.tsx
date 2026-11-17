@@ -8,6 +8,7 @@ import { ActivityLogList } from "../../components/ActivityLogList";
 import { useFamilyScope } from "./familyData";
 import { loadUserStatus, type UserStatus } from "./userStatus";
 import { reqStatus } from "../user/wheelchair/wcLabels";
+import { Icon } from "../../components/ui/Icon";
 
 export default function FamilyDashboard() {
   const { t, lang } = useI18n();
@@ -23,7 +24,7 @@ export default function FamilyDashboard() {
   return (
     <div className="grid gap-5 lg:grid-cols-2">
       <div className="card p-5 flex flex-col gap-2">
-        <h2 className="font-bold text-lg">💚 {t("imFine").replace("💚 ", "")}</h2>
+        <h2 className="font-bold text-lg"><Icon name="heart" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("imFine").replace("💚 ", "")}</h2>
         <p className={`text-xl font-bold ${s.checkin ? "text-success" : s.checkinOverdue ? "text-danger" : ""}`}>
           {s.checkin ? t("famCheckin", { time: fmtTime(s.checkin.created_at, lang) }) : t("famNoCheckin")}
         </p>
@@ -53,7 +54,7 @@ export default function FamilyDashboard() {
       </div>
 
       <div className="card p-5 flex flex-col gap-2">
-        <h2 className="font-bold text-lg">🆘 {t("sosEvents")}</h2>
+        <h2 className="font-bold text-lg"><Icon name="sos" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("sosEvents")}</h2>
         {!s.lastSos ? <p className="text-muted">—</p> : (
           <ul className="flex flex-col gap-1">
             {[s.lastSos, ...s.sosToday.filter((e) => e.id !== s.lastSos!.id)].map((e) => (
@@ -67,7 +68,7 @@ export default function FamilyDashboard() {
       </div>
 
       <div className="card p-5 flex flex-col gap-2">
-        <h2 className="font-bold text-lg">♿ {t("wheelchairRequests")}</h2>
+        <h2 className="font-bold text-lg"><Icon name="wheelchair" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("wheelchairRequests")}</h2>
         {s.requests.length === 0 ? <p className="text-muted">{t("noRequests")}</p> : (
           <ul className="flex flex-col gap-1">
             {s.requests.map((r) => <li key={r.id}>{reqStatus(t, r.status)} · {fmtDate(r.created_at, lang)}{r.return_date && r.status === "accepted" ? ` · ${t("returnBy", { date: fmtDate(r.return_date, lang) })}` : ""}</li>)}

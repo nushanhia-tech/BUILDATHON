@@ -12,6 +12,7 @@ import { BigButton } from "../ui/BigButton";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { PhotoUpload } from "../ui/PhotoUpload";
 import { useNames } from "./useNames";
+import { Icon } from "../ui/Icon";
 
 export function useContacts(userId: string) {
   const [contacts, setContacts] = useState<Contact[] | null>(null);
@@ -121,7 +122,12 @@ export function ContactsManager({
               })}
             </p>
             <p className="text-[1.2rem]">
-              👤 {c.name} · {c.relation} · {c.phone}
+              <Icon
+                name="user"
+                size={18}
+                className="inline-block align-[-0.25em] mr-1.5"
+              />
+              {c.name} · {c.relation} · {c.phone}
             </p>
             <div className="grid grid-cols-2 gap-2">
               <BigButton
@@ -174,7 +180,16 @@ export function ContactsManager({
                     <p className="text-muted">{c.speciality || c.relation}</p>
                     <p className="text-sm text-muted">{c.notes}</p>
                     <div className="flex flex-wrap gap-1">
-                      {c.is_sos && <Badge tone="danger">🆘 SOS</Badge>}
+                      {c.is_sos && (
+                        <Badge tone="danger">
+                          <Icon
+                            name="sos"
+                            size={18}
+                            className="inline-block align-[-0.25em] mr-1.5"
+                          />
+                          SOS
+                        </Badge>
+                      )}
                       {c.needs_confirmation && (
                         <Badge tone="warn">{t("pendingApprovalBadge")}</Badge>
                       )}
@@ -213,14 +228,24 @@ export function ContactsManager({
                       onClick={() => setEdit(c)}
                       className="flex-1 min-h-12 rounded-2xl bg-soft font-semibold"
                     >
-                      ✏️ {t("edit")}
+                      <Icon
+                        name="edit"
+                        size={18}
+                        className="inline-block align-[-0.25em] mr-1.5"
+                      />
+                      {t("edit")}
                     </button>
                     <button
                       type="button"
                       onClick={() => setDel(c)}
                       className="flex-1 min-h-12 rounded-2xl bg-soft text-danger font-semibold"
                     >
-                      🗑️ {t("delete")}
+                      <Icon
+                        name="trash"
+                        size={18}
+                        className="inline-block align-[-0.25em] mr-1.5"
+                      />
+                      {t("delete")}
                     </button>
                   </div>
                 )}

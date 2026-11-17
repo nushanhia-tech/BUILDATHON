@@ -7,6 +7,7 @@ import { homeFor } from "./RoleGuard";
 import { errMsg, useToast } from "../hooks/useToast";
 import { Field } from "../components/ui/Bits";
 import type { Role } from "../lib/types";
+import { Icon } from "../components/ui/Icon";
 
 function LangSwitch() {
   const { lang, setLang, t } = useI18n();
@@ -17,7 +18,12 @@ function LangSwitch() {
       aria-label={t("language")}
       className="min-h-12 px-4 rounded-full bg-surface border-2 border-line font-semibold"
     >
-      🌐 {lang === "ml" ? "English" : "മലയാളം"}
+      <Icon
+        name="globe"
+        size={18}
+        className="inline-block align-[-0.25em] mr-1.5"
+      />
+      {lang === "ml" ? "English" : "മലയാളം"}
     </button>
   );
 }
@@ -281,7 +287,7 @@ export function SignupPage() {
               role="radio"
               aria-checked={role === r.key}
               onClick={() => setRole(r.key)}
-              className={`min-h-28 rounded-3xl p-3 flex flex-col items-center justify-center gap-1 border-4 font-bold ${role === r.key ? "border-primary bg-soft" : "border-line bg-surface"}`}
+              className={`min-h-24 rounded-2xl p-3 flex flex-col items-center justify-center gap-1 border-2 font-bold ${role === r.key ? "border-primary bg-soft" : "border-line bg-surface"}`}
             >
               <span className="text-4xl" aria-hidden="true">
                 {r.icon}

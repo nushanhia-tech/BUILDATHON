@@ -7,6 +7,7 @@ import { speak } from "../../lib/tts";
 import type { Contact, EmergencyInfo } from "../../lib/types";
 import { Field, Sheet, Spinner } from "../ui/Bits";
 import { BigButton } from "../ui/BigButton";
+import { Icon } from "../ui/Icon";
 
 export function useEmergencyInfo(userId: string) {
   const [info, setInfo] = useState<EmergencyInfo | null | undefined>(undefined);
@@ -46,7 +47,7 @@ export function EmergencyCardView({ name, info, contacts, onClose }: { name: str
     <div role="dialog" aria-modal="true" aria-label={t("emergencyCard")} className="fixed inset-0 z-[900] bg-white text-black overflow-y-auto p-5">
       <div className="max-w-lg mx-auto flex flex-col gap-4">
         <div className="bg-red-600 text-white rounded-3xl p-5">
-          <p className="text-lg font-semibold">🪪 {t("emergencyCard")}</p>
+          <p className="text-lg font-semibold"><Icon name="idcard" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("emergencyCard")}</p>
           <p className="text-[2rem] font-extrabold">{name}</p>
           {info?.note && <p className="text-[1.6rem] font-bold mt-2 bg-white text-red-700 rounded-2xl p-3">{info.note}</p>}
         </div>
@@ -56,7 +57,7 @@ export function EmergencyCardView({ name, info, contacts, onClose }: { name: str
           ))}
         </dl>
         {contacts.filter((c) => c.is_sos && !c.needs_confirmation).map((c) => (
-          <a key={c.id} href={`tel:${c.phone}`} className="min-h-16 rounded-2xl bg-green-700 text-white font-bold text-xl flex items-center justify-center">📞 {c.name} · {c.phone}</a>
+          <a key={c.id} href={`tel:${c.phone}`} className="min-h-16 rounded-2xl bg-green-700 text-white font-bold text-xl flex items-center justify-center"><Icon name="phone" size={18} className="inline-block align-[-0.25em] mr-1.5" />{c.name} · {c.phone}</a>
         ))}
         {qr && <figure className="flex flex-col items-center gap-2"><img src={qr} alt={t("qrHelp")} className="w-64 h-64" /><figcaption className="text-gray-600">{t("qrHelp")}</figcaption></figure>}
         <button onClick={() => speak(text.replace(/\n/g, ". "), { force: true })} className="min-h-16 rounded-2xl bg-gray-100 font-bold text-xl">{t("readThis")}</button>

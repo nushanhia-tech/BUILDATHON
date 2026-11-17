@@ -14,6 +14,7 @@ import {
 import { HomePreview } from "../../components/settings/HomePreview";
 import { Section, Spinner } from "../../components/ui/Bits";
 import { useFamilyScope } from "./familyData";
+import { Icon } from "../../components/ui/Icon";
 
 /** Remote "എന്റെ App ക്രമീകരിക്കാം" with a live phone preview (full access only). */
 export default function FamilyCustomize() {
@@ -47,7 +48,14 @@ export default function FamilyCustomize() {
 
   if (!canFull)
     return (
-      <p className="card p-5 text-warn font-semibold">🔒 {t("famNeedFull")}</p>
+      <p className="card p-5 text-warn font-semibold">
+        <Icon
+          name="lock"
+          size={18}
+          className="inline-block align-[-0.25em] mr-1.5"
+        />
+        {t("famNeedFull")}
+      </p>
     );
   if (!loaded || !draft || !display) return <Spinner />;
 
@@ -88,7 +96,12 @@ export default function FamilyCustomize() {
       </div>
       <aside className="lg:sticky lg:top-6">
         <h2 className="font-bold text-lg mb-3 text-center">
-          📱 {t("livePreview")}
+          <Icon
+            name="phone"
+            size={18}
+            className="inline-block align-[-0.25em] mr-1.5"
+          />
+          {t("livePreview")}
         </h2>
         <HomePreview
           custom_labels={draft.custom_labels}

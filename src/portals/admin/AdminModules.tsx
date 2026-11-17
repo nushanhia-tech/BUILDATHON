@@ -7,6 +7,7 @@ import { Sheet, Spinner, Toggle, Field } from "../../components/ui/Bits";
 import { ConfirmDialog } from "../../components/ui/ConfirmDialog";
 import { isCustom } from "../../lib/modules";
 import type { ModuleRow, SubFeature } from "../../lib/types";
+import { Icon } from "../../components/ui/Icon";
 
 const ICONS = ["💊", "📋", "👁️", "🦻", "♿", "🆘", "🏥", "📞", "🌐", "🛒", "🍲", "🚌", "🙏", "🎵", "📻", "📖", "🧘", "☎️", "🏦", "⭐"];
 
@@ -67,14 +68,14 @@ export default function AdminModules() {
                       <button disabled={i === modules.length - 1} onClick={() => void move(i, 1)} aria-label={t("moveDown")} className="min-h-10 min-w-10 rounded-lg bg-soft disabled:opacity-30">↓</button>
                     </td>
                     <td className="p-2 text-2xl">{m.icon}</td>
-                    <td className="p-2 font-semibold">{m.label_ml}{isCustom(m.key) && <span className="block text-xs text-muted">🔗 {m.link_url}</span>}</td>
+                    <td className="p-2 font-semibold">{m.label_ml}{isCustom(m.key) && <span className="block text-xs text-muted"><Icon name="link" size={18} className="inline-block align-[-0.25em] mr-1.5" />{m.link_url}</span>}</td>
                     <td className="p-2">{m.label_en}</td>
                     <td className="p-2"><span className="inline-block w-6 h-6 rounded-full align-middle" style={{ background: m.color }} /></td>
                     <td className="p-2"><Toggle label="" checked={m.enabled_globally} onChange={(v) => void patch(m.id, { enabled_globally: v })} /></td>
                     <td className="p-2 whitespace-nowrap">
-                      <button onClick={() => setEdit(m)} className="min-h-10 px-3 rounded-lg bg-soft">✏️</button>{" "}
+                      <button onClick={() => setEdit(m)} className="min-h-10 px-3 rounded-lg bg-soft"><Icon name="edit" size={20} /></button>{" "}
                       {subs.length > 0 && <button onClick={() => setOpen(open === m.key ? null : m.key)} aria-expanded={open === m.key} className="min-h-10 px-3 rounded-lg bg-soft">{t("subFeatures")} ({subs.length})</button>}
-                      {isCustom(m.key) && <button onClick={() => setDel(m)} className="min-h-10 px-3 rounded-lg bg-soft text-danger ml-1">🗑️</button>}
+                      {isCustom(m.key) && <button onClick={() => setDel(m)} className="min-h-10 px-3 rounded-lg bg-soft text-danger ml-1"><Icon name="trash" size={20} /></button>}
                     </td>
                   </tr>
                   {open === m.key && subs.map((f) => (

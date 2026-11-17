@@ -53,9 +53,9 @@ export function TalkBridge() {
       <div className="card p-4 min-h-[40vh] max-h-[55vh] overflow-y-auto flex flex-col gap-3" aria-live="polite" aria-label={t("captionsHere")}>
         {lines.length === 0 && !stt.interim && <p className="text-muted text-xl">{t("captionsHere")}</p>}
         {lines.map((l, i) => (
-          <p key={i} className={`text-[2rem] leading-snug font-bold ${l.who === "me" ? "text-primary text-right" : ""}`}>{l.text}</p>
+          <p key={i} className={`text-[1.6rem] leading-snug font-bold ${l.who === "me" ? "text-primary text-right" : ""}`}>{l.text}</p>
         ))}
-        {stt.interim && <p className="text-[2rem] leading-snug text-muted italic">{stt.interim}</p>}
+        {stt.interim && <p className="text-[1.6rem] leading-snug text-muted italic">{stt.interim}</p>}
         <div ref={endRef} />
       </div>
 
@@ -67,8 +67,8 @@ export function TalkBridge() {
             <BigButton variant={sttLang === "en-IN" ? "primary" : "surface"} label={t("langEn")} onClick={() => switchLang("en-IN")} pressed={sttLang === "en-IN"} />
           </div>
           {stt.supported && (stt.listening
-            ? <BigButton variant="danger" label={t("stopListening")} className="min-h-24 text-[1.4rem]" onClick={stt.stop} />
-            : <BigButton label={t("startListening")} className="min-h-24 text-[1.4rem]" onClick={() => stt.start()} />)}
+            ? <BigButton variant="danger" label={t("stopListening")} className="min-h-14 text-[1.05rem]" onClick={stt.stop} />
+            : <BigButton label={t("startListening")} className="min-h-14 text-[1.05rem]" onClick={() => stt.start()} />)}
           {stt.error && <p className="text-danger">{t("micError")} ({stt.error})</p>}
         </div>
       ) : (
@@ -85,7 +85,7 @@ export function TalkBridge() {
         <div className="grid grid-cols-2 gap-2">
           {phrases.map((p) => {
             const text = pickLabel(lang, p.text_ml, p.text_en);
-            return <BigButton key={p.id} variant="tile" icon={p.icon ?? "💬"} label={text} className="min-h-28" onClick={() => say(text)} />;
+            return <BigButton key={p.id} variant="surface" icon={p.icon ?? "💬"} label={text} className="min-h-14 !justify-start text-left text-[0.95rem]" onClick={() => say(text)} />;
           })}
         </div>
       </Section>

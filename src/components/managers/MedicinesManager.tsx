@@ -13,6 +13,7 @@ import { BigButton } from "../ui/BigButton";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { PhotoUpload } from "../ui/PhotoUpload";
 import { useNames } from "./useNames";
+import { Icon, IconLabel } from "../ui/Icon";
 
 interface Props {
   userId: string;
@@ -78,17 +79,15 @@ export function MedicinesManager({
   const pending = (meds ?? []).filter((m) => m.needs_confirmation);
 
   const take = async (d: Dose) => {
-    const { error } = await supabase
-      .from("med_logs")
-      .upsert(
-        {
-          medicine_id: d.medicine.id,
-          user_id: userId,
-          scheduled_for: d.scheduled.toISOString(),
-          taken_at: new Date().toISOString(),
-        },
-        { onConflict: "medicine_id,scheduled_for" },
-      );
+    const { error } = await supabase.from("med_logs").upsert(
+      {
+        medicine_id: d.medicine.id,
+        user_id: userId,
+        scheduled_for: d.scheduled.toISOString(),
+        taken_at: new Date().toISOString(),
+      },
+      { onConflict: "medicine_id,scheduled_for" },
+    );
     if (error) toast(error.message, "error");
     else {
       toast(`${d.medicine.name} — ${t("takenDone")}`, "success");
@@ -137,7 +136,12 @@ export function MedicinesManager({
               })}
             </p>
             <p className="text-[1.3rem]">
-              💊 {m.name} · {m.times.map((x) => hhmm12(x, lang)).join(", ")}
+              <Icon
+                name="pill"
+                size={18}
+                className="inline-block align-[-0.25em] mr-1.5"
+              />
+              {m.name} · {m.times.map((x) => hhmm12(x, lang)).join(", ")}
             </p>
             {m.notes && <p className="text-muted">{m.notes}</p>}
             <div className="grid grid-cols-2 gap-2">
@@ -177,8 +181,8 @@ export function MedicinesManager({
             if (!ds.length) return null;
             return (
               <div key={s.key} className="flex flex-col gap-2 mb-3">
-                <h3 className="font-bold text-muted">
-                  {s.icon} {s.label}
+                <h3 className="font-semibold text-muted">
+                  <IconLabel label={`${s.icon} ${s.label}`} size={20} />
                 </h3>
                 {ds.map((d) => (
                   <div
@@ -197,7 +201,7 @@ export function MedicinesManager({
                           className="w-16 h-16 rounded-2xl bg-soft grid place-items-center text-3xl shrink-0"
                           aria-hidden="true"
                         >
-                          💊
+                          <Icon name="pill" size={28} />
                         </span>
                       )}
                       <div className="flex-1 min-w-0">
@@ -205,7 +209,12 @@ export function MedicinesManager({
                           {d.medicine.name}
                         </p>
                         <p className="text-muted text-base">
-                          🕒 {fmtTime(d.scheduled, lang)}
+                          <Icon
+                            name="clock"
+                            size={18}
+                            className="inline-block align-[-0.25em] mr-1.5"
+                          />
+                          {fmtTime(d.scheduled, lang)}
                           {d.medicine.notes ? ` · ${d.medicine.notes}` : ""}
                         </p>
                       </div>
@@ -271,7 +280,7 @@ export function MedicinesManager({
                   aria-label={`${t("readAloud")}: ${m.name}`}
                   className="flex-1 min-h-14 rounded-2xl bg-soft"
                 >
-                  🔊
+                  <Icon name="speaker" size={20} />
                 </button>
                 {canEdit && (
                   <button
@@ -280,7 +289,7 @@ export function MedicinesManager({
                     aria-label={`${t("edit")}: ${m.name}`}
                     className="flex-1 min-h-14 rounded-2xl bg-soft"
                   >
-                    ✏️
+                    <Icon name="edit" size={20} />
                   </button>
                 )}
                 {canEdit && (
@@ -290,7 +299,7 @@ export function MedicinesManager({
                     aria-label={`${t("delete")}: ${m.name}`}
                     className="flex-1 min-h-14 rounded-2xl bg-soft text-danger"
                   >
-                    🗑️
+                    <Icon name="trash" size={20} />
                   </button>
                 )}
               </span>
@@ -474,7 +483,7 @@ function MedicineForm({
                 type="button"
                 aria-pressed={times.includes(c.time)}
                 onClick={() => toggle(c.time)}
-                className={`min-h-20 rounded-2xl font-bold border-4 flex flex-col items-center justify-center ${times.includes(c.time) ? "border-primary bg-soft text-primary" : "border-line"}`}
+                className={`min-h-16 rounded-2xl font-semibold border-2 flex flex-col items-center justify-center ${times.includes(c.time) ? "border-primary bg-soft text-primary" : "border-line"}`}
               >
                 {t(c.key)}
                 <span className="text-sm font-normal">

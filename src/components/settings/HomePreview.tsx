@@ -1,5 +1,6 @@
 import type { ModuleRow } from "../../lib/types";
 import { useI18n, pickLabel } from "../../lib/i18n";
+import { Icon, moduleIcon, splitLabel } from "../ui/Icon";
 
 /** Phone-frame preview of a user's home screen (family remote-customise). */
 export function HomePreview({
@@ -44,7 +45,7 @@ export function HomePreview({
             border: highContrast ? "2px solid #ff0" : "none",
           }}
         >
-          {t("speakAsk")}
+          {splitLabel(t("speakAsk")).text}
         </div>
         <div className="grid grid-cols-2 gap-2">
           {modules.map((m) => (
@@ -59,8 +60,13 @@ export function HomePreview({
                   : "0 6px 16px rgba(37,99,235,.08)",
               }}
             >
-              <span className="text-3xl" aria-hidden="true">
-                {custom_icons?.[m.key] || m.icon}
+              <span
+                aria-hidden="true"
+                style={{ color: highContrast ? "#ff0" : m.color }}
+              >
+                {custom_icons?.[m.key] || (
+                  <Icon name={moduleIcon(m.key, m.icon)} size={28} />
+                )}
               </span>
               <span className="font-semibold leading-tight">
                 {custom_labels?.[m.key] ||

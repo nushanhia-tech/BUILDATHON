@@ -16,10 +16,11 @@ import type { MedLog, Medicine, Task } from "../../lib/types";
 import { BigButton } from "../../components/ui/BigButton";
 import { ReadAloudButton } from "../../components/ui/ReadAloudButton";
 import { Spinner } from "../../components/ui/Bits";
+import { Icon, moduleIcon, splitLabel } from "../../components/ui/Icon";
 
 export default function Home() {
   const { profile } = useAuth();
-  const { visible, loaded, isOn } = useUserSettings();
+  const { visible, loaded, isOn, settings } = useUserSettings();
   const { t, lang } = useI18n();
   const { simple } = useA11y();
   const uid = profile!.id;
@@ -98,17 +99,17 @@ export default function Home() {
       <header className="home-greeting flex items-start gap-3">
         <div className="flex-1">
           <p className="text-muted">{tod},</p>
-          <h1 className="text-[1.5rem] font-bold leading-snug">
+          <h1 className="text-[1.35rem] font-bold leading-snug">
             {t("greeting", { name: firstName })}
           </h1>
-          <p className="text-[1.1rem] text-primary font-semibold">
+          <p className="text-[1rem] text-primary font-semibold">
             {t("greetingSub")}
           </p>
         </div>
         <Link
           to="/app/settings"
           aria-label={t("navSettings")}
-          className="shrink-0 w-16 h-16 rounded-full bg-soft grid place-items-center text-2xl font-bold text-primary border-4 border-surface shadow"
+          className="shrink-0 w-12 h-12 rounded-full bg-soft grid place-items-center text-xl font-bold text-primary border-2 border-surface shadow"
         >
           {profile?.avatar_url ? (
             <img
@@ -141,22 +142,25 @@ export default function Home() {
         />
         <div
           aria-hidden="true"
-          className="absolute right-5 top-5 text-5xl opacity-90"
+          className="absolute right-4 top-4 w-14 h-14 rounded-2xl bg-white/20 grid place-items-center"
         >
-          🎙️
+          <Icon name="mic" size={30} />
         </div>
-        <h2 className="text-[1.2rem] font-bold pr-16">
-          {t("speakAsk").replace("🎤 ", "")}
+        <h2 className="text-[1.1rem] font-bold pr-16">
+          {splitLabel(t("speakAsk")).text}
         </h2>
-        {!simple && <p className="opacity-90 pr-16">{t("speakAskSub")}</p>}
+        {!simple && (
+          <p className="opacity-90 pr-16 text-[0.9rem]">{t("speakAskSub")}</p>
+        )}
         {stt.supported ? (
           <button
             type="button"
             onClick={() => (stt.listening ? stt.stop() : stt.start())}
             aria-pressed={stt.listening}
-            className={`self-start min-h-16 px-6 rounded-full font-bold text-xl shadow ${stt.listening ? "bg-danger text-white animate-pulse" : "bg-white text-primary"}`}
+            className={`self-start min-h-12 px-5 rounded-full font-semibold inline-flex items-center gap-2 shadow ${stt.listening ? "bg-danger text-white animate-pulse" : "bg-white text-primary"}`}
           >
-            {stt.listening ? `🔴 ${t("listening")}` : t("speakAsk")}
+            <Icon name={stt.listening ? "stop" : "mic"} size={20} />
+            {stt.listening ? t("listening") : splitLabel(t("speakAsk")).text}
           </button>
         ) : (
           <p className="text-sm bg-white/15 rounded-2xl p-3">{t("noStt")}</p>
@@ -186,25 +190,27 @@ export default function Home() {
           <button
             type="submit"
             aria-label={t("send")}
-            className="min-h-16 min-w-16 rounded-2xl bg-white text-primary font-bold text-xl"
+            className="min-h-12 min-w-12 rounded-2xl bg-white text-primary grid place-items-center"
           >
-            ➤
+            <Icon name="send" size={22} />
           </button>
         </form>
       </section>
       {vc.reply && (
         <div
           role="status"
-          className="card p-4 border-l-8 border-primary text-[1.2rem] font-semibold flex gap-3 items-start"
+          className="card p-4 border-l-4 border-primary text-[1.05rem] font-semibold flex gap-3 items-start"
         >
-          <span aria-hidden="true">💬</span>
+          <span className="text-primary">
+            <Icon name="chat" size={22} />
+          </span>
           <span className="flex-1">{vc.reply}</span>
           <button
             onClick={vc.clear}
             aria-label={t("close")}
-            className="min-h-12 min-w-12 rounded-xl bg-soft"
+            className="min-h-10 min-w-10 rounded-xl bg-soft grid place-items-center"
           >
-            ✕
+            <Icon name="close" size={20} />
           </button>
         </div>
       )}
@@ -213,27 +219,27 @@ export default function Home() {
       {medsOn && nextDose && (
         <Link
           to="/app/medicines"
-          className="card p-4 flex items-center gap-4 border-l-8 border-primary"
+          className="card p-3.5 flex items-center gap-3 border-l-4 border-primary"
         >
           <span
-            className="w-14 h-14 rounded-2xl bg-soft grid place-items-center text-3xl"
+            className="w-11 h-11 rounded-xl bg-soft text-primary grid place-items-center"
             aria-hidden="true"
           >
-            💊
+            <Icon name="pill" size={24} />
           </span>
           <span className="flex-1">
             <span className="block text-sm text-muted">
               {t("nextMedicine")}
             </span>
-            <span className="block font-bold">
+            <span className="block font-semibold">
               {t("nextMedAt", {
                 name: nextDose.medicine.name,
                 time: fmtTime(nextDose.scheduled, lang),
               })}
             </span>
           </span>
-          <span aria-hidden="true" className="text-2xl text-primary">
-            ›
+          <span aria-hidden="true" className="text-primary rotate-180">
+            <Icon name="back" size={22} />
           </span>
         </Link>
       )}
@@ -247,7 +253,7 @@ export default function Home() {
             : "services-section"
         }
       >
-        <h2 id="svc" className="text-[1.15rem] font-bold mb-3">
+        <h2 id="svc" className="text-[1.05rem] font-bold mb-3">
           {t("myServices")}
         </h2>
         {visible.length === 0 ? (
@@ -263,14 +269,20 @@ export default function Home() {
                 <BigButton
                   key={m.key}
                   variant="tile"
-                  icon={m.icon}
+                  icon={
+                    settings?.custom_icons?.[m.key] ? (
+                      <span>{m.icon}</span>
+                    ) : (
+                      <Icon name={moduleIcon(m.key, m.icon)} size={26} />
+                    )
+                  }
                   accent={m.color}
                   label={label}
                   sub={sub}
                   className={
                     simple
-                      ? "min-h-24 !flex-row !justify-start text-[1.15rem]"
-                      : "min-h-32"
+                      ? "min-h-20 !flex-row !items-center !justify-start text-[1.05rem]"
+                      : "min-h-28 text-[0.95rem]"
                   }
                   to={isCustom(m.key) ? undefined : MODULE_ROUTES[m.key]}
                   href={isCustom(m.key) ? customHref(m.link_url) : undefined}
@@ -285,18 +297,19 @@ export default function Home() {
       {/* Upcoming task */}
       {!simple && nextTask && (
         <section>
-          <h2 className="text-[1.15rem] font-bold mb-3">{t("todayTasks")}</h2>
-          <Link to="/app/tasks" className="card p-4 flex items-center gap-4">
+          <h2 className="text-[1.05rem] font-bold mb-3">{t("todayTasks")}</h2>
+          <Link to="/app/tasks" className="card p-3.5 flex items-center gap-3">
             <span
-              className="w-14 h-14 rounded-2xl bg-soft grid place-items-center text-3xl"
+              className="w-11 h-11 rounded-xl bg-soft text-primary grid place-items-center"
               aria-hidden="true"
             >
-              📋
+              <Icon name="tasks" size={24} />
             </span>
             <span className="flex-1">
-              <span className="block font-bold">{nextTask.title}</span>
-              <span className="block text-muted text-base">
-                🕒 {nextTask.due_at ? fmtTime(nextTask.due_at, lang) : ""}
+              <span className="block font-semibold">{nextTask.title}</span>
+              <span className="flex items-center gap-1 text-muted text-sm">
+                <Icon name="clock" size={16} />
+                {nextTask.due_at ? fmtTime(nextTask.due_at, lang) : ""}
               </span>
             </span>
           </Link>

@@ -17,6 +17,7 @@ import { GiveForm } from "./GiveForm";
 import type { ContactReveal, PublicProfile, Wheelchair as Wc, WheelchairPublic, WheelchairRequest, WcOffer, WcType } from "../../../lib/types";
 import { TYPE_ICON, WC_OFFERS, WC_TYPES, reqReason, reqStatus, wcOffer, wcStatus, wcType } from "./wcLabels";
 import { phoneDigits, waLink } from "../../../lib/geo";
+import { Icon } from "../../../components/ui/Icon";
 
 type Tab = "find" | "give" | "mine";
 
@@ -83,7 +84,7 @@ function FindTab() {
         <label className="flex flex-col"><span className="text-sm font-semibold">{t("filterType")}</span>
           <select value={type} onChange={(e) => setType(e.target.value as WcType | "")}>
             <option value="">{t("all")}</option>
-            {WC_TYPES.map((v) => <option key={v} value={v}>{TYPE_ICON[v]} {wcType(t, v)}</option>)}
+            {WC_TYPES.map((v) => <option key={v} value={v}>{wcType(t, v)}</option>)}
           </select>
         </label>
         <label className="flex flex-col"><span className="text-sm font-semibold">{t("filterOffer")}</span>
@@ -102,7 +103,7 @@ function FindTab() {
       {view === "map" ? (
         <>
           <MapView center={origin} zoom={12} me={me} ariaLabel={t("mapView")}
-            points={list.map(({ w }) => ({ id: w.id, lat: w.public_lat, lng: w.public_lng, color: STATUS_COLOR[w.status], label: `${TYPE_ICON[w.type]} ${wcType(t, w.type)} · ${wcStatus(t, w.status)}`, onClick: () => nav(`/app/wheelchair/${w.id}`) }))} height={420} />
+            points={list.map(({ w }) => ({ id: w.id, lat: w.public_lat, lng: w.public_lng, color: STATUS_COLOR[w.status], label: `${wcType(t, w.type)} · ${wcStatus(t, w.status)}`, onClick: () => nav(`/app/wheelchair/${w.id}`) }))} height={420} />
           <p className="text-sm text-muted">{t("st_available")} · {t("st_requested")} · {t("st_in_use")} · 🔵 {t("you")} — {t("approxLocation")}</p>
         </>
       ) : list.length === 0 ? <Empty text={t("noListings")} icon="♿" /> : (
@@ -111,11 +112,11 @@ function FindTab() {
             <li key={w.id}>
               <Link to={`/app/wheelchair/${w.id}`} className="card p-3 flex gap-3 items-center">
                 {w.photo_urls[0] ? <img src={w.photo_urls[0]} alt="" className="w-24 h-24 object-cover rounded-2xl" />
-                  : <span className="w-24 h-24 rounded-2xl bg-soft grid place-items-center text-5xl" aria-hidden="true">{TYPE_ICON[w.type]}</span>}
+                  : <span className="w-24 h-24 rounded-2xl bg-soft grid place-items-center text-5xl" aria-hidden="true"><Icon name="wheelchair" size={44} className="text-primary" /></span>}
                 <span className="flex-1 min-w-0">
                   <span className="block font-bold">{wcType(t, w.type)}</span>
                   <span className="block text-base">{wcOffer(t, w.offer)}{w.offer === "rent" && w.rent_per_day ? ` · ${t("perDay", { n: w.rent_per_day })}` : ""}</span>
-                  <span className="block text-base text-muted">📍 {w.place_name} · {t("kmAway", { km: formatKm(km) })}</span>
+                  <span className="block text-base text-muted"><Icon name="pin" size={18} className="inline-block align-[-0.25em] mr-1.5" />{w.place_name} · {t("kmAway", { km: formatKm(km) })}</span>
                   <span className="flex flex-wrap gap-1 mt-1">
                     <Badge tone={w.status === "available" ? "success" : w.status === "requested" ? "warn" : "danger"}>{wcStatus(t, w.status)}</Badge>
                     {w.owner_verified && <Badge tone="success">{t("verified")}</Badge>}
@@ -137,7 +138,7 @@ function GiveTab({ onDone }: { onDone: () => void }) {
   return (
     <div className="flex flex-col gap-3">
       <h2 className="text-[1.3rem] font-bold">{t("giveTitle")}</h2>
-      {!profile?.phone && <p className="card p-3 text-warn font-semibold">☎️ {t("needPhoneProfile")}</p>}
+      {!profile?.phone && <p className="card p-3 text-warn font-semibold"><Icon name="phone" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("needPhoneProfile")}</p>}
       <GiveForm ownerId={profile!.id} onDone={onDone} />
     </div>
   );
@@ -199,11 +200,11 @@ function MineTab() {
             {incoming.map((r) => (
               <li key={r.id} className="card p-4 flex flex-col gap-2">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-bold flex-1">{r.wc ? `${TYPE_ICON[r.wc.type]} ${wcType(t, r.wc.type)}` : ""}</span>
+                  <span className="font-bold flex-1">{r.wc ? `${wcType(t, r.wc.type)}` : ""}</span>
                   <Badge tone={r.status === "accepted" ? "success" : r.status === "pending" ? "warn" : "soft"}>{reqStatus(t, r.status)}</Badge>
                 </div>
                 <p>{t("seeker")}: <b>{r.seeker?.name}</b> · {reqReason(t, r.reason)} · {r.days_needed} 📅</p>
-                {r.message && <p className="bg-soft rounded-2xl p-3">💬 {r.message}</p>}
+                {r.message && <p className="bg-soft rounded-2xl p-3"><Icon name="chat" size={18} className="inline-block align-[-0.25em] mr-1.5" />{r.message}</p>}
                 {r.return_date && <p className="text-muted">{t("returnBy", { date: fmtDate(r.return_date, lang) })}</p>}
                 {r.contact?.phone && (
                   <div className="grid grid-cols-2 gap-2">
@@ -229,16 +230,16 @@ function MineTab() {
           <ul className="flex flex-col gap-3">
             {mine.map((w) => (
               <li key={w.id} className="card p-3 flex gap-3 items-center">
-                {w.photo_urls[0] ? <img src={w.photo_urls[0]} alt="" className="w-20 h-20 object-cover rounded-2xl" /> : <span className="w-20 h-20 rounded-2xl bg-soft grid place-items-center text-4xl">{TYPE_ICON[w.type]}</span>}
+                {w.photo_urls[0] ? <img src={w.photo_urls[0]} alt="" className="w-20 h-20 object-cover rounded-2xl" /> : <span className="w-20 h-20 rounded-2xl bg-soft grid place-items-center text-4xl"><Icon name="wheelchair" size={36} className="text-primary" /></span>}
                 <div className="flex-1">
                   <p className="font-bold">{wcType(t, w.type)}</p>
-                  <p className="text-base text-muted">📍 {w.place_name}</p>
+                  <p className="text-base text-muted"><Icon name="pin" size={18} className="inline-block align-[-0.25em] mr-1.5" />{w.place_name}</p>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {w.approved ? <Badge tone="success">{wcStatus(t, w.status)}</Badge> : <Badge tone="warn">⏳ {t("awaitingApproval")}</Badge>}
+                    {w.approved ? <Badge tone="success">{wcStatus(t, w.status)}</Badge> : <Badge tone="warn"><Icon name="hourglass" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("awaitingApproval")}</Badge>}
                     {w.is_demo && <Badge tone="warn">{t("demo")}</Badge>}
                   </div>
                 </div>
-                <button type="button" aria-label={t("delete")} onClick={() => setDel(w.id)} className="min-h-16 min-w-16 rounded-2xl bg-soft text-danger text-xl">🗑️</button>
+                <button type="button" aria-label={t("delete")} onClick={() => setDel(w.id)} className="min-h-16 min-w-16 rounded-2xl bg-soft text-danger text-xl"><Icon name="trash" size={20} /></button>
               </li>
             ))}
           </ul>
@@ -251,7 +252,7 @@ function MineTab() {
             {outgoing.map((r) => (
               <li key={r.id}>
                 <Link to={`/app/wheelchair/${r.wheelchair_id}`} className="card p-4 flex flex-col gap-1">
-                  <span className="font-bold">{r.wc ? `${TYPE_ICON[r.wc.type]} ${wcType(t, r.wc.type)} · ${r.wc.place_name ?? ""}` : "♿"}</span>
+                  <span className="font-bold">{r.wc ? `${wcType(t, r.wc.type)} · ${r.wc.place_name ?? ""}` : "♿"}</span>
                   <span><Badge tone={r.status === "accepted" ? "success" : r.status === "pending" ? "warn" : "soft"}>{reqStatus(t, r.status)}</Badge></span>
                   {r.return_date && r.status === "accepted" && <span className="text-warn font-semibold">{t("returnBy", { date: fmtDate(r.return_date, lang) })}</span>}
                 </Link>

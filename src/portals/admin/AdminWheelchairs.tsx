@@ -11,6 +11,7 @@ import { MapView, STATUS_COLOR } from "../../components/map/MapView";
 import { GiveForm } from "../user/wheelchair/GiveForm";
 import type { Profile, Wheelchair, WcStatus, WcType } from "../../lib/types";
 import { TYPE_ICON, WC_TYPES, reqReason, reqStatus, wcCond, wcOffer, wcStatus, wcType } from "../user/wheelchair/wcLabels";
+import { Icon } from "../../components/ui/Icon";
 
 type View = "table" | "gallery" | "map";
 interface HistRow { id: string; seeker_name: string; reason: string; days_needed: number; status: string; return_date: string | null; created_at: string }
@@ -63,12 +64,12 @@ export default function AdminWheelchairs() {
       </div>
 
       <Section title={`${t("approvalQueue")} (${queue.length})`}>
-        {queue.length === 0 ? <p className="text-muted">✔️</p> : (
+        {queue.length === 0 ? <p className="text-muted"><Icon name="check" size={20} /></p> : (
           <ul className="grid gap-3 md:grid-cols-2">
             {queue.map((w) => (
               <li key={w.id} className="card p-4 flex gap-3">
                 <div className="flex gap-1">{w.photo_urls.slice(0, 2).map((p) => <img key={p} src={p} alt="" className="w-24 h-24 object-cover rounded-xl" />)}
-                  {!w.photo_urls.length && <span className="w-24 h-24 rounded-xl bg-soft grid place-items-center text-4xl">{TYPE_ICON[w.type]}</span>}</div>
+                  {!w.photo_urls.length && <span className="w-24 h-24 rounded-xl bg-soft grid place-items-center text-4xl"><Icon name="wheelchair" size={36} className="text-primary" /></span>}</div>
                 <div className="flex-1 flex flex-col gap-1">
                   <p className="font-bold">{wcType(t, w.type)} {w.is_demo && <Badge tone="warn">{t("demo")}</Badge>}</p>
                   <p className="text-sm text-muted">{wcCond(t, w.condition)} · {wcOffer(t, w.offer)} · 📍 {w.place_name}</p>
@@ -98,7 +99,7 @@ export default function AdminWheelchairs() {
               <tbody>
                 {filtered.map((w) => (
                   <tr key={w.id} className="border-t border-line">
-                    <td className="p-3">{TYPE_ICON[w.type]} {wcType(t, w.type)} {w.is_demo && <Badge tone="warn">{t("demo")}</Badge>}</td>
+                    <td className="p-3">{wcType(t, w.type)} {w.is_demo && <Badge tone="warn">{t("demo")}</Badge>}</td>
                     <td className="p-3">{w.place_name}</td>
                     <td className="p-3">{owner(w.owner_id)?.name} {owner(w.owner_id)?.verified && "✔️"}</td>
                     <td className="p-3">{wcOffer(t, w.offer)}</td>
@@ -115,7 +116,7 @@ export default function AdminWheelchairs() {
           <ul className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {filtered.map((w) => (
               <li key={w.id} className="tile p-2">
-                {w.photo_urls[0] ? <img src={w.photo_urls[0]} alt="" className="w-full aspect-square object-cover rounded-xl" /> : <div className="w-full aspect-square rounded-xl bg-soft grid place-items-center text-5xl">{TYPE_ICON[w.type]}</div>}
+                {w.photo_urls[0] ? <img src={w.photo_urls[0]} alt="" className="w-full aspect-square object-cover rounded-xl" /> : <div className="w-full aspect-square rounded-xl bg-soft grid place-items-center text-5xl"><Icon name="wheelchair" size={44} className="text-primary" /></div>}
                 <p className="font-semibold mt-1">{wcType(t, w.type)}</p><p className="text-sm text-muted">{w.place_name}</p>
               </li>
             ))}
