@@ -64,7 +64,7 @@ export const en: Record<StringKey, string> = {
   iAmFamily: "I am a family member",
   iAmFamilySub: "To help my loved ones",
   chooseRole: "Who are you?",
-  signupDone: "Account created. Check your inbox if email confirmation is required.",
+  signupDone: "Account created. Please log in.",
   blocked: "This account is blocked. Please contact the admin.",
   demoAccounts: "Demo accounts",
   passwordMin: "At least 6 characters",

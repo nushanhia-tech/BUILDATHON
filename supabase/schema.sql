@@ -15,6 +15,7 @@ drop table if exists public.messages, public.reports, public.wheelchair_requests
   public.med_logs, public.medicines, public.activity_log, public.family_links, public.user_settings,
   public.sub_features, public.modules, public.profiles cascade;
 drop function if exists public.handle_new_user() cascade;
+drop function if exists public.auto_confirm_email() cascade;
 
 -- =====================================================================
 -- TABLES
@@ -310,6 +311,18 @@ end $$;
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users
   for each row execute function public.handle_new_user();
+
+-- No email verification: new accounts are confirmed at creation so they can log in immediately.
+-- (Also turn off "Confirm email" in Authentication → Providers → Email so no mail is sent.)
+create or replace function public.auto_confirm_email() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  if new.email_confirmed_at is null then new.email_confirmed_at := now(); end if;
+  return new;
+end $$;
+drop trigger if exists auto_confirm_email on auth.users;
+create trigger auto_confirm_email before insert on auth.users
+  for each row execute function public.auto_confirm_email();
 
 -- Users cannot promote themselves, verify themselves or unblock themselves.
 create or replace function public.protect_profile() returns trigger

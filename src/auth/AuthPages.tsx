@@ -108,7 +108,13 @@ export function SignupPage() {
         email: email.trim(), password, options: { data: { role, name: name.trim(), phone: phone.trim() || null } },
       });
       if (error) throw error;
-      if (data.session) nav(role === "family" ? "/family" : "/app/onboarding", { replace: true });
+      // No email verification: if signUp returned no session, log in straight away.
+      let session = data.session;
+      if (!session) {
+        const res = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+        session = res.data.session;
+      }
+      if (session) nav(role === "family" ? "/family" : "/app/onboarding", { replace: true });
       else { toast(t("signupDone"), "success"); nav("/login"); }
     } catch (err) { toast(errMsg(err), "error"); }
     finally { setBusy(false); }
