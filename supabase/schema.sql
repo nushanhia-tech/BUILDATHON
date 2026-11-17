@@ -57,7 +57,7 @@ create table public.sub_features (
 create table public.user_settings (
   user_id uuid primary key references public.profiles(id) on delete cascade,
   enabled_modules text[] not null default array['medicines','tasks','vision','hearing','wheelchair','family_sos'],
-  enabled_features text[] not null default array['reminder','history','tasks','where_kept','ocr','note','objects','light',
+  enabled_features text[] not null default array['reminder','history','tasks','where_kept','ocr','objects','light',
     'talk_bridge','sound_alert','sign_cards','find','give','contacts','checkin','sos','emergency_card'],
   module_order text[] not null default array['medicines','tasks','vision','hearing','wheelchair','family_sos'],
   text_size text not null default 'large' check (text_size in ('large','xl')),
@@ -752,7 +752,6 @@ insert into public.sub_features (module_key, key, label_ml, label_en) values
   ('tasks',      'tasks',          'ചെയ്യാനുള്ളവ',             'Tasks'),
   ('tasks',      'where_kept',     'ഞാൻ എവിടെ വെച്ചു?',       'Where did I keep it?'),
   ('vision',     'ocr',            'വായിച്ചുതരൂ (OCR)',        'Read text (OCR)'),
-  ('vision',     'note',           'നോട്ട് തിരിച്ചറിയൽ',      'Currency notes'),
   ('vision',     'objects',        'മുന്നിൽ എന്ത്?',           'What''s in front?'),
   ('vision',     'light',          'വെളിച്ചം അറിയാൻ',        'Light detector'),
   ('hearing',    'talk_bridge',    'സംസാര പാലം',              'Talk bridge'),

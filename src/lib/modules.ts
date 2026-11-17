@@ -24,7 +24,7 @@ export const MODULE_ROUTES: Record<string, string> = {
 export const MODULE_DESCRIPTIONS: Record<string, { ml: string; en: string }> = {
   medicines: { ml: "മരുന്ന് കഴിക്കേണ്ട സമയം ഓർമ്മിപ്പിക്കും.", en: "Reminds you when to take medicines." },
   tasks: { ml: "ചെയ്യാനുള്ള കാര്യങ്ങളും, സാധനങ്ങൾ എവിടെ വെച്ചു എന്നും ഓർത്തുവെക്കും.", en: "Remembers tasks and where you kept things." },
-  vision: { ml: "ക്യാമറ ഉപയോഗിച്ച് വായിച്ചുതരും, നോട്ട് തിരിച്ചറിയും, വെളിച്ചം പറയും.", en: "Reads text, recognises notes and checks light using the camera." },
+  vision: { ml: "ക്യാമറ ഉപയോഗിച്ച് വായിച്ചുതരും, മുന്നിലുള്ളത് പറയും, വെളിച്ചം പറയും.", en: "Reads text, describes what's in front and checks light using the camera." },
   hearing: { ml: "സംസാരം വലിയ അക്ഷരങ്ങളാക്കും, വലിയ ശബ്ദം വന്നാൽ മിന്നും.", en: "Turns speech into big text and flashes on loud sounds." },
   wheelchair: { ml: "അടുത്തുള്ള വീൽചെയർ കണ്ടെത്താനും നൽകാനും.", en: "Find or give wheelchairs nearby." },
   family_sos: { ml: "കുടുംബത്തെ വിളിക്കാനും, SOS അയക്കാനും.", en: "Call family and send SOS." },

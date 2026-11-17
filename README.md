@@ -11,7 +11,7 @@ Three portals chosen by role at login:
 | Family | `/family` | Family members linked **with the user's consent** (mobile + desktop) |
 | Admin | `/admin` | Global modules, content, wheelchair approvals, stats (desktop) |
 
-Stack (all free tiers): Vite + React + TypeScript, Tailwind CSS v4, React Router, Supabase (Auth, Postgres, RLS, Storage, Realtime), Leaflet + OpenStreetMap + Nominatim, Web Speech API, Tesseract.js, TensorFlow.js (COCO-SSD + a Teachable Machine model), Web Audio / Vibration / Wake Lock / Canvas, Gemini (via a Vercel function only), vite-plugin-pwa, Vercel.
+Stack (all free tiers): Vite + React + TypeScript, Tailwind CSS v4, React Router, Supabase (Auth, Postgres, RLS, Storage, Realtime), Leaflet + OpenStreetMap + Nominatim, Web Speech API, Tesseract.js, TensorFlow.js (COCO-SSD), Web Audio / Vibration / Wake Lock / Canvas, Gemini (via a Vercel function only), vite-plugin-pwa, Vercel.
 
 ---
 
@@ -34,7 +34,6 @@ Copy `.env.example` to `.env.local`:
 |---|---|---|
 | `VITE_SUPABASE_URL` | client | Project URL |
 | `VITE_SUPABASE_ANON_KEY` | client | anon public key (safe in the browser; RLS protects data) |
-| `VITE_NOTE_MODEL_URL` | client | Teachable Machine model URL ending in `/` (see §2) |
 | `GEMINI_API_KEY` | **server only** | <https://aistudio.google.com/apikey>. Never prefix with `VITE_`. |
 | `GEMINI_MODEL` | server, optional | defaults to `gemini-2.5-flash` |
 
@@ -53,19 +52,7 @@ Camera/mic need HTTPS or `localhost`. `/api/simplify` only runs on Vercel (or `n
 
 ---
 
-## 2. Currency-note model (Teachable Machine)
-1. Go to <https://teachablemachine.withgoogle.com/train/image>.
-2. Create 7 classes named exactly **`10`, `20`, `50`, `100`, `200`, `500`, `none`** (the app reads the number from the class name).
-3. For each note, record ~150–300 webcam/phone images: front and back, different angles, distances, lighting, partly folded, in a hand. For `none`, record hands, table, wallet, other papers.
-4. **Train model** → **Export model** → **TensorFlow.js** → **Upload (shareable link)** → copy the URL, e.g. `https://teachablemachine.withgoogle.com/models/AbC123xYz/`.
-5. Paste it as `VITE_NOTE_MODEL_URL` (keep the trailing `/`) in `.env.local` and in Vercel → redeploy.
-   Without it the Note tab shows "Model ചേർത്തിട്ടില്ല".
-
-The model is loaded with TensorFlow.js directly (same format and preprocessing as `@teachablemachine/image`; that package pins TF.js 1.x, which conflicts with COCO-SSD).
-
----
-
-## 3. Demo accounts
+## 2. Demo accounts
 Password for all: **`NilaDemo@123`** (also one-tap fill on the login page).
 
 | Email | Role | Notes |
@@ -78,7 +65,7 @@ All demo wheelchairs are flagged `is_demo` and show a **ഡെമോ / DEMO** ba
 
 ---
 
-## 4. Three-portal demo script (≈5 min)
+## 3. Three-portal demo script (≈5 min)
 Use two windows: phone (or Chrome device mode) logged in as **user**, laptop as **family**, then **admin**.
 
 **User (Ummah, phone)**
@@ -104,7 +91,7 @@ Use two windows: phone (or Chrome device mode) logged in as **user**, laptop as 
 
 ---
 
-## 5. Sign-card images to replace
+## 4. Sign-card images to replace
 `public/signs/*.svg` are labelled **placeholders**. Replace each with a real ISL photo/illustration (same filename, or upload new ones in Admin → Content and delete the old card):
 
 `01-namaskaram` നമസ്കാരം · `02-nanni` നന്ദി · `03-vellam` വെള്ളം · `04-bhakshanam` ഭക്ഷണം · `05-sahayam` സഹായം · `06-vedana` വേദന · `07-doctor` ഡോക്ടർ · `08-marunnu` മരുന്ന് · `09-amma` അമ്മ · `10-achan` അച്ഛൻ · `11-veedu` വീട് · `12-suchimuri` ശുചിമുറി · `13-urakkam` ഉറക്കം · `14-athe` അതെ · `15-alla` അല്ല · `16-nilkku` നിൽക്കൂ · `17-varu` വരൂ · `18-poku` പോകൂ · `19-santhosham` സന്തോഷം · `20-kshamikkanam` ക്ഷമിക്കണം
@@ -113,14 +100,14 @@ Use two windows: phone (or Chrome device mode) logged in as **user**, laptop as 
 
 ---
 
-## 6. Architecture notes
+## 5. Architecture notes
 - **Customisation rule** (`src/lib/modules.ts`): visible modules = `modules.enabled_globally` ∩ `user_settings.enabled_modules`, ordered by `user_settings.module_order`; same for sub-features. Settings changes stream over Supabase Realtime (`useSettingsFor`).
 - **Privacy / RLS** (`supabase/schema.sql`): users own their rows; family access via `family_level()` (view / assist / full); assist inserts are forced to `needs_confirmation = true` by trigger; admins have **no** policies on medical tables; wheelchair exact location + phone only via `get_request_contact()` after acceptance; public coordinates fuzzed 200–500 m by trigger; every family change → `activity_log` trigger.
 - **Safety**: Simplify never gives dosing advice (server prompt + visible disclaimer); SOS is labelled "not an official emergency service" with 112/108; voice never sends SOS directly; no payments; "What's in front?" shows a white-cane disclaimer.
 - Folders: `src/portals/{user,family,admin}`, `src/components/ui` (BigButton, ReadAloudButton, ConfirmDialog, FlashOverlay, VoiceInput…), `src/components/managers` (shared user/family CRUD), `src/lib` (supabase, tts, stt, voiceRouter, haversine, geo, i18n), `src/hooks` (useUserSettings, useRealtime, useCamera, useMic, useTTS, useSpeechRecognition).
 - All UI strings live in `src/i18n/ml.ts` and `src/i18n/en.ts`.
 
-## 7. Mobile testing notes
+## 6. Mobile testing notes
 - Target: **Android + Chrome** over HTTPS. iOS Safari lacks SpeechRecognition (text fallback is shown) and the Vibration API (a note is shown).
 - Malayalam TTS needs a Malayalam voice: Android → Settings → Text-to-speech → Google → install **Malayalam**. Otherwise en-IN is used.
 - Sound alert and reminders work only while the tab is open (Wake Lock keeps the screen on where supported).
