@@ -222,7 +222,7 @@ export const ml = {
   left: "ഇടതുവശത്ത്",
   front: "മുന്നിൽ",
   right: "വലതുവശത്ത്",
-  objectSentence: "{pos} {obj}ഉണ്ട്",
+  objectSentence: "{pos} {obj} ഉണ്ട്",
   nothingSeen: "ഒന്നും കാണുന്നില്ല",
   lightHelp: "മുറിയിൽ വെളിച്ചമുണ്ടോ എന്ന് അറിയാം.",
   checkNow: "🔍 ഇപ്പോൾ നോക്കൂ",

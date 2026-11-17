@@ -130,3 +130,22 @@ export function Sheet({ open, title, onClose, children }: { open: boolean; title
     </div>
   );
 }
+
+/** Big single-choice chips (accessible radiogroup). */
+export function ChipGroup<T extends string>({ label, options, value, onChange }: {
+  label: string; options: { value: T; label: string }[]; value: T | null; onChange: (v: T) => void;
+}) {
+  return (
+    <fieldset className="flex flex-col gap-2">
+      <legend className="font-semibold mb-1">{label}</legend>
+      <div role="radiogroup" className="flex flex-wrap gap-2">
+        {options.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={value === o.value} onClick={() => onChange(o.value)}
+            className={`min-h-14 px-4 rounded-2xl font-semibold border-2 ${value === o.value ? "bg-primary text-on-primary border-primary" : "bg-surface border-line"}`}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
