@@ -30,7 +30,7 @@ export const ml = {
   noVibration: "ഈ ഫോണിൽ വൈബ്രേഷൻ ലഭ്യമല്ല.",
   noStt: "ഈ ബ്രൗസറിൽ ശബ്ദം തിരിച്ചറിയൽ ലഭ്യമല്ല. ദയവായി ടൈപ്പ് ചെയ്യൂ (Android Chrome നല്ലത്).",
   offline: "ഇന്റർനെറ്റ് ഇല്ല. കണക്ഷൻ ശരിയാക്കിയ ശേഷം വീണ്ടും ശ്രമിക്കൂ.",
-  setupMissing: "Supabase ക്രമീകരിച്ചിട്ടില്ല. .env ഫയലിൽ VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY ചേർക്കൂ.",
+  setupMissing: "Supabase ക്രമീകരിച്ചിട്ടില്ല. .env ഫയലിൽ NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY ചേർക്കൂ.",
   language: "ഭാഷ",
   malayalam: "മലയാളം",
   english: "English",

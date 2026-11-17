@@ -31,7 +31,7 @@ export const en: Record<StringKey, string> = {
   noVibration: "Vibration is not available on this device.",
   noStt: "Speech recognition isn't available in this browser. Please type instead (Android Chrome works best).",
   offline: "You are offline. Please try again when connected.",
-  setupMissing: "Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.",
+  setupMissing: "Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.",
   language: "Language",
   malayalam: "മലയാളം",
   english: "English",

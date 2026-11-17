@@ -7,3 +7,6 @@ dev-dist
 *.log
 .env*
 !.env.example
+
+.next
+out

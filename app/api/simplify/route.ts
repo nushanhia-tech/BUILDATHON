@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { NextResponse } from "next/server";
 
 // Server-only: GEMINI_API_KEY is never sent to the browser.
 const SYSTEM_PROMPT =
@@ -8,15 +8,14 @@ const SYSTEM_PROMPT =
   "'സംശയമുണ്ടെങ്കിൽ ഡോക്ടറോടോ ഫാർമസിസ്റ്റിനോടോ ചോദിക്കൂ.' " +
   "You are not a doctor and must never present yourself as one. Output plain text only, no markdown.";
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== "POST") return res.status(405).json({ error: "method_not_allowed" });
+export async function POST(req: Request) {
   const key = process.env.GEMINI_API_KEY;
-  if (!key) return res.status(500).json({ error: "not_configured" });
+  if (!key) return NextResponse.json({ error: "not_configured" }, { status: 500 });
 
-  const body = typeof req.body === "string" ? safeJson(req.body) : req.body;
+  const body = await req.json().catch(() => null);
   const text = String(body?.text ?? "").trim();
-  if (!text) return res.status(400).json({ error: "empty" });
-  if (text.length > 6000) return res.status(413).json({ error: "too_long" });
+  if (!text) return NextResponse.json({ error: "empty" }, { status: 400 });
+  if (text.length > 6000) return NextResponse.json({ error: "too_long" }, { status: 413 });
 
   const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   try {
@@ -29,16 +28,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         generationConfig: { temperature: 0.2, maxOutputTokens: 600 },
       }),
     });
-    if (r.status === 429) return res.status(429).json({ error: "rate_limited" });
-    if (!r.ok) return res.status(502).json({ error: "upstream", status: r.status });
+    if (r.status === 429) return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+    if (!r.ok) return NextResponse.json({ error: "upstream", status: r.status }, { status: 502 });
     const j = (await r.json()) as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
     const out = j.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("").trim();
-    if (!out) return res.status(502).json({ error: "empty_response" });
-    res.setHeader("Cache-Control", "no-store");
-    return res.status(200).json({ text: out });
+    if (!out) return NextResponse.json({ error: "empty_response" }, { status: 502 });
+    return NextResponse.json({ text: out }, { status: 200, headers: { "Cache-Control": "no-store" } });
   } catch {
-    return res.status(502).json({ error: "network" });
+    return NextResponse.json({ error: "network" }, { status: 502 });
   }
 }
-
-function safeJson(s: string) { try { return JSON.parse(s); } catch { return null; } }

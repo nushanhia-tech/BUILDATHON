@@ -11,7 +11,7 @@ Three portals chosen by role at login:
 | Family | `/family` | Family members linked **with the user's consent** (mobile + desktop) |
 | Admin | `/admin` | Global modules, content, wheelchair approvals, stats (desktop) |
 
-Stack (all free tiers): Vite + React + TypeScript, Tailwind CSS v4, React Router, Supabase (Auth, Postgres, RLS, Storage, Realtime), Leaflet + OpenStreetMap + Nominatim, Web Speech API, Tesseract.js, TensorFlow.js (COCO-SSD), Web Audio / Vibration / Wake Lock / Canvas, Gemini (via a Vercel function only), vite-plugin-pwa, Vercel.
+Stack (all free tiers): Next.js App Router + React + TypeScript, Tailwind CSS v4, React Router, Supabase (Auth, Postgres, RLS, Storage, Realtime), Leaflet + OpenStreetMap + Nominatim, Web Speech API, Tesseract.js, TensorFlow.js (COCO-SSD), Web Audio / Vibration / Wake Lock / Canvas, Gemini (via a Vercel function only), web app manifest, Vercel.
 
 ---
 
@@ -32,21 +32,21 @@ Copy `.env.example` to `.env.local`:
 
 | Variable | Where | Notes |
 |---|---|---|
-| `VITE_SUPABASE_URL` | client | Project URL |
-| `VITE_SUPABASE_ANON_KEY` | client | anon public key (safe in the browser; RLS protects data) |
-| `GEMINI_API_KEY` | **server only** | <https://aistudio.google.com/apikey>. Never prefix with `VITE_`. |
+| `NEXT_PUBLIC_SUPABASE_URL` | client | Project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | client | anon public key (safe in the browser; RLS protects data) |
+| `GEMINI_API_KEY` | **server only** | <https://aistudio.google.com/apikey>. Never prefix with `NEXT_PUBLIC_`. |
 | `GEMINI_MODEL` | server, optional | defaults to `gemini-2.5-flash` |
 
 ### 1.3 Run locally
 ```bash
 npm install
-npm run dev          # http://localhost:5173
+npm run dev          # http://localhost:3000
 ```
-Camera/mic need HTTPS or `localhost`. `/api/simplify` only runs on Vercel (or `npx vercel dev`).
+Camera/mic need HTTPS or `localhost`. `/api/simplify` runs locally and on Vercel as a Next.js Route Handler.
 
 ### 1.4 Deploy to Vercel
-1. Import the GitHub repo in Vercel (framework auto-detects **Vite**; `vercel.json` sets the SPA rewrites and keeps `/api/*` for functions).
-2. Add the env vars from 1.2 for **Production** (and Preview). `GEMINI_API_KEY` stays server-side — it's only read in `api/simplify.ts`.
+1. Import the GitHub repo in Vercel (framework is **Next.js**; `vercel.json` selects it explicitly).
+2. Add the env vars from 1.2 for **Production** (and Preview). `GEMINI_API_KEY` stays server-side — it's only read in `app/api/simplify/route.ts`.
 3. Deploy. Open the URL on Android Chrome → menu → **Install app**.
 4. In Supabase **Authentication → URL Configuration**, set the Site URL to your Vercel URL.
 
@@ -112,3 +112,33 @@ Use two windows: phone (or Chrome device mode) logged in as **user**, laptop as 
 - Malayalam TTS needs a Malayalam voice: Android → Settings → Text-to-speech → Google → install **Malayalam**. Otherwise en-IN is used.
 - Sound alert and reminders work only while the tab is open (Wake Lock keeps the screen on where supported).
 - First use of OCR / object detection downloads models (~10–20 MB); after that they're cached.
+
+## 7. Next.js migration and Git workflow
+
+Next.js owns the document, deployment, catch-all page and `/api/simplify` endpoint.
+The existing React Router portals run inside a client-only boundary because camera,
+speech, local storage and Leaflet require browser APIs. All existing deep links remain valid.
+The manifest supports installation; the former Vite service-worker offline caching is
+not included in this migration. An internet connection is required. Existing installations
+should clear their previous site's service worker/cache before testing this version.
+
+```bash
+npm ci
+npm run typecheck
+npm run build
+npm start
+```
+
+Git remote: `https://github.com/nushanhia-tech/BUILDATHON.git`.
+Commit the lockfile; keep `.env.local` and server API keys out of Git.
+Vercel should use the repository root and its default Next.js output directory.
+After importing the repo, add the public Supabase URL/key and optional server-only
+Gemini key to Vercel, then deploy. Set the deployed URL in Supabase Auth URL configuration.
+Do not run the destructive demo schema against an existing production database.
+
+Repository review: Nila includes medicine and task tracking, voice navigation,
+vision/hearing assistance, wheelchair listings, consent-based family management,
+and administrative controls. Supabase supplies authentication, relational data,
+row-level access rules, storage and realtime updates. Sign-card SVGs are placeholders.
+Live database access and Gemini require project credentials; a successful build alone
+does not verify those integrations.
