@@ -13,6 +13,7 @@ import { dosesFor, type Dose } from "../../lib/meds";
 import { endOfDay, fmtDate, startOfDay, todayStr } from "../../lib/time";
 import type { FamilyLink, LinkLevel, MedLog, Medicine, PublicProfile, UserSettings } from "../../lib/types";
 import { FlashOverlay } from "../../components/ui/FlashOverlay";
+import { NavIcon } from "../../components/ui/NavIcon";
 import { Spinner } from "../../components/ui/Bits";
 
 export default function UserLayout() {
@@ -49,21 +50,22 @@ function UserShell() {
   const onboarding = loc.pathname === "/app/onboarding";
 
   const tabs = [
-    { to: "/app", icon: "🏠", label: t("navHome"), end: true },
-    ...(isOn("family_sos") ? [{ to: "/app/family", icon: "🆘", label: t("navFamily"), end: false }] : []),
-    { to: "/app/settings", icon: "⚙️", label: t("navSettings"), end: false },
+    { to: "/app", icon: <NavIcon name="home" />, label: t("navHome"), end: true },
+    ...(isOn("family_sos") ? [{ to: "/app/family", icon: <NavIcon name="family" />, label: t("navFamily"), end: false }] : []),
+    { to: "/app/settings", icon: <NavIcon name="settings" />, label: t("navSettings"), end: false },
   ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="user-shell min-h-screen">
       <ThemeSync s={settings} />
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-surface p-3 rounded-xl z-50">Skip</a>
-      <main id="main" className={`mx-auto w-full max-w-xl px-4 pt-5 ${onboarding ? "pb-10" : "safe-bottom"}`}>
+      <div className="user-brand brand"><span className="brand-symbol" aria-hidden="true">✦</span> {t("appName") === "Nila" ? "Nila" : `${t("appName")} · Nila`}</div>
+      <main id="main" className={`user-main mx-auto w-full px-4 pt-5 ${onboarding ? "pb-10" : "safe-bottom"}`}>
         <Outlet />
       </main>
       {!onboarding && (
-        <nav aria-label="Main" className="fixed bottom-0 inset-x-0 z-40 bg-surface/95 backdrop-blur border-t border-line pb-[env(safe-area-inset-bottom)]">
-          <ul className="mx-auto max-w-xl flex justify-around">
+        <nav aria-label="Main" className="user-navigation">
+          <ul className="user-nav-list">
             {tabs.map((tab) => (
               <li key={tab.to} className="flex-1">
                 <NavLink to={tab.to} end={tab.end} className={({ isActive }) =>

@@ -57,9 +57,9 @@ export default function Home() {
   if (!loaded) return <Spinner />;
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="home-dashboard flex flex-col gap-5">
       {/* Greeting */}
-      <header className="flex items-start gap-3">
+      <header className="home-greeting flex items-start gap-3">
         <div className="flex-1">
           <p className="text-muted">{tod},</p>
           <h1 className="text-[1.8rem] font-bold leading-tight">{t("greeting", { name: firstName })}</h1>
@@ -72,7 +72,7 @@ export default function Home() {
       <ReadAloudButton text={[t("greeting", { name: firstName }), t("greetingSub"), t("homeHelp")]} className="self-start" />
 
       {/* Voice hero */}
-      <section className="hero p-5 flex flex-col gap-3 relative overflow-hidden" aria-label={t("speakAsk")}>
+      <section className="hero voice-hero p-5 flex flex-col gap-3 relative overflow-hidden" aria-label={t("speakAsk")}>
         <div aria-hidden="true" className="absolute -right-6 -top-6 w-36 h-36 rounded-full bg-white/10" />
         <div aria-hidden="true" className="absolute right-5 top-5 text-5xl opacity-90">🎙️</div>
         <h2 className="text-[1.4rem] font-bold pr-16">{t("speakAsk").replace("🎤 ", "")}</h2>
@@ -111,12 +111,12 @@ export default function Home() {
       )}
 
       {/* Modules — data-driven */}
-      <section aria-labelledby="svc" className={vc.unknown ? "ring-4 ring-warn rounded-3xl p-2 -m-2" : ""}>
+      <section aria-labelledby="svc" className={vc.unknown ? "services-section ring-4 ring-warn rounded-3xl p-2 -m-2" : "services-section"}>
         <h2 id="svc" className="text-[1.3rem] font-bold mb-3">{t("myServices")}</h2>
         {visible.length === 0 ? (
           <p className="card p-5 text-muted">{t("noModules")}</p>
         ) : (
-          <div className={`grid gap-3 ${simple ? "grid-cols-1" : "grid-cols-2"}`}>
+          <div className={`service-grid grid gap-3 ${simple ? "grid-cols-1" : "grid-cols-2"}`}>
             {visible.map((m) => {
               const label = pickLabel(lang, m.label_ml, m.label_en);
               const sub = lang === "ml" && !simple ? m.label_en : undefined;

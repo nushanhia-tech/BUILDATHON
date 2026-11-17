@@ -25,8 +25,8 @@ export function SideShell({ title, nav, children, banner }: { title: string; nav
   const { t, lang, setLang } = useI18n();
   const [open, setOpen] = useState(false);
   return (
-    <div className="min-h-screen md:flex">
-      <aside className={`md:w-64 md:min-h-screen bg-surface border-r border-line md:block ${open ? "block" : "hidden"} md:sticky md:top-0`}>
+    <div className="portal-shell min-h-screen md:flex">
+      <aside className={`portal-sidebar md:w-64 md:min-h-screen bg-surface border-r border-line md:block ${open ? "block" : "hidden"} md:sticky md:top-0`}>
         <div className="p-5 flex items-center gap-3 border-b border-line">
           <img src="/icon.svg" alt="" className="w-10 h-10 rounded-xl" />
           <div>
@@ -48,13 +48,13 @@ export function SideShell({ title, nav, children, banner }: { title: string; nav
           <button onClick={() => void signOut()} className="min-h-12 rounded-xl border-2 border-line font-semibold">{t("logout")}</button>
         </div>
       </aside>
-      <div className="flex-1 min-w-0">
+      <div className="portal-body flex-1 min-w-0">
         <div className="md:hidden flex items-center justify-between p-3 bg-surface border-b border-line sticky top-0 z-30">
           <span className="font-bold">{t("appName")} · {title}</span>
           <button onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-label="Menu" className="min-h-12 min-w-12 rounded-xl bg-soft text-xl">☰</button>
         </div>
         {banner}
-        <main className="p-4 md:p-8 max-w-6xl">{children}</main>
+        <main className="portal-main p-4 md:p-8 max-w-6xl">{children}</main>
       </div>
     </div>
   );

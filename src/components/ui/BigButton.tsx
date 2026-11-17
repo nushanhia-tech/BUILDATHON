@@ -81,7 +81,7 @@ export function BigButton({ label, icon, sub, onClick, to, href, variant = "prim
       {icon != null && (
         <span
           aria-hidden="true"
-          className={isTile ? "grid place-items-center w-16 h-16 rounded-2xl text-4xl" : "text-2xl"}
+          className={isTile ? "module-icon grid place-items-center w-16 h-16 rounded-2xl text-4xl" : "text-2xl"}
           style={isTile && accent ? { background: `${accent}1f` } : undefined}
         >
           {icon}
