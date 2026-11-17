@@ -10,6 +10,7 @@ import { ConfirmDialog } from "../../../components/ui/ConfirmDialog";
 import { MapView } from "../../../components/map/MapView";
 import type { WcCondition, WcDuration, WcOffer, WcType } from "../../../lib/types";
 import { TYPE_ICON, WC_CONDITIONS, WC_DURATIONS, WC_OFFERS, WC_TYPES, wcCond, wcDur, wcOffer, wcType } from "./wcLabels";
+import { Icon } from "../../../components/ui/Icon";
 
 /** Listing form (user "Give" tab and admin "add as organisation"). */
 export function GiveForm({ ownerId, onDone, asAdmin = false }: { ownerId: string; onDone: () => void; asAdmin?: boolean }) {
@@ -74,11 +75,11 @@ export function GiveForm({ ownerId, onDone, asAdmin = false }: { ownerId: string
       <div className="flex flex-col gap-4">
         <div className="card p-4 flex flex-col gap-3">
           <div className="flex gap-2 overflow-x-auto">{photos.map((p) => <img key={p} src={p} alt="" className="w-40 h-32 object-cover rounded-2xl" />)}</div>
-          <p className="text-[1.3rem] font-bold">{TYPE_ICON[type]} {wcType(t, type)}</p>
+          <p className="text-[1.3rem] font-bold">{wcType(t, type)}</p>
           <p>{t("condition")}: {wcCond(t, condition)} · {t("offer")}: {wcOffer(t, offer)}{offer === "rent" ? ` (${t("perDay", { n: rent || 0 })})` : ""}</p>
           <p>{t("duration")}: {wcDur(t, duration)} · {delivery ? t("delivery") : t("noDelivery")}</p>
-          <p>📍 {placeName}</p>
-          <p className="text-sm text-muted bg-soft rounded-2xl p-3">🔒 {t("privacyNote")}</p>
+          <p><Icon name="pin" size={18} className="inline-block align-[-0.25em] mr-1.5" />{placeName}</p>
+          <p className="text-sm text-muted bg-soft rounded-2xl p-3"><Icon name="lock" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("privacyNote")}</p>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <BigButton variant="surface" label={`← ${t("edit")}`} onClick={() => setPreview(false)} />
@@ -92,7 +93,7 @@ export function GiveForm({ ownerId, onDone, asAdmin = false }: { ownerId: string
   return (
     <div className="flex flex-col gap-5">
       <Field label={t("photos")}><PhotoUpload value={photos} onChange={setPhotos} max={3} folder="wheelchairs" /></Field>
-      <ChipGroup label={t("type")} value={type} onChange={setType} options={WC_TYPES.map((v) => ({ value: v, label: `${TYPE_ICON[v]} ${wcType(t, v)}` }))} />
+      <ChipGroup label={t("type")} value={type} onChange={setType} options={WC_TYPES.map((v) => ({ value: v, label: `${wcType(t, v)}` }))} />
       <ChipGroup label={t("condition")} value={condition} onChange={setCondition} options={WC_CONDITIONS.map((v) => ({ value: v, label: wcCond(t, v) }))} />
       <ChipGroup label={t("offer")} value={offer} onChange={setOffer} options={WC_OFFERS.map((v) => ({ value: v, label: wcOffer(t, v) }))} />
       {offer === "rent" && <Field label={t("rentPerDay")}><input type="number" min={0} inputMode="numeric" value={rent} onChange={(e) => setRent(e.target.value)} /></Field>}
@@ -109,7 +110,7 @@ export function GiveForm({ ownerId, onDone, asAdmin = false }: { ownerId: string
             {results.map((r) => (
               <li key={`${r.lat},${r.lng}`}>
                 <button type="button" className="w-full text-left p-3 min-h-14" onClick={() => { setPos({ lat: r.lat, lng: r.lng }); setPlaceName(r.name.split(",")[0]); setResults([]); setQuery(""); }}>
-                  📍 {r.name}
+                  <Icon name="pin" size={18} className="inline-block align-[-0.25em] mr-1.5" />{r.name}
                 </button>
               </li>
             ))}
@@ -120,7 +121,7 @@ export function GiveForm({ ownerId, onDone, asAdmin = false }: { ownerId: string
         <Field label={t("placeName")}><input value={placeName} onChange={(e) => setPlaceName(e.target.value)} /></Field>
       </fieldset>
       <div className="card p-4"><Toggle label={t("delivery")} checked={delivery} onChange={setDelivery} /></div>
-      <p className="text-sm text-muted bg-soft rounded-2xl p-3">🔒 {t("privacyNote")}</p>
+      <p className="text-sm text-muted bg-soft rounded-2xl p-3"><Icon name="lock" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("privacyNote")}</p>
       <BigButton label={t("preview")} onClick={() => validate() && setPreview(true)} />
     </div>
   );

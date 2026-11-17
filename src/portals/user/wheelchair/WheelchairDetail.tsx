@@ -15,6 +15,7 @@ import { MapView, STATUS_COLOR } from "../../../components/map/MapView";
 import { useMyPosition } from "./Wheelchair";
 import type { ContactReveal, ReqReason, WheelchairPublic, WheelchairRequest } from "../../../lib/types";
 import { REASONS, TYPE_ICON, reqReason, reqStatus, wcCond, wcDur, wcOffer, wcStatus, wcType } from "./wcLabels";
+import { Icon } from "../../../components/ui/Icon";
 
 export default function WheelchairDetail({ seekerId: seekerOverride }: { seekerId?: string } = {}) {
   const { id: paramId } = useParams();
@@ -79,8 +80,8 @@ export default function WheelchairDetail({ seekerId: seekerOverride }: { seekerI
 
   return (
     <div className="flex flex-col gap-4">
-      <PageHeader title={`${TYPE_ICON[w.type]} ${wcType(t, w.type)}`} help={`${wcOffer(t, w.offer)} · ${w.place_name ?? ""}`} back="/app/wheelchair" />
-      {w.is_demo && <p className="card p-3 text-warn font-semibold">🧪 {t("demoListing")}</p>}
+      <PageHeader title={`${wcType(t, w.type)}`} help={`${wcOffer(t, w.offer)} · ${w.place_name ?? ""}`} back="/app/wheelchair" />
+      {w.is_demo && <p className="card p-3 text-warn font-semibold"><Icon name="sparkle" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("demoListing")}</p>}
       {w.photo_urls.length > 0 ? (
         <div className="flex flex-col gap-2">
           <img src={w.photo_urls[photo]} alt={wcType(t, w.type)} className="w-full aspect-[4/3] object-cover rounded-3xl" />
@@ -92,7 +93,7 @@ export default function WheelchairDetail({ seekerId: seekerOverride }: { seekerI
             </div>
           )}
         </div>
-      ) : <div className="w-full aspect-[4/3] rounded-3xl bg-soft grid place-items-center text-[8rem]" aria-hidden="true">{TYPE_ICON[w.type]}</div>}
+      ) : <div className="w-full aspect-[4/3] rounded-3xl bg-soft grid place-items-center text-[8rem]" aria-hidden="true"><Icon name="wheelchair" size={96} className="text-primary" /></div>}
 
       <div className="card p-4 grid grid-cols-2 gap-3">
         <div><p className="text-sm text-muted">{t("status")}</p><p className="font-bold">{wcStatus(t, w.status)}</p></div>
@@ -124,7 +125,7 @@ export default function WheelchairDetail({ seekerId: seekerOverride }: { seekerI
             <BigButton variant="success" label={`${t("call")} ${contact.phone}`} href={`tel:${phoneDigits(contact.phone)}`} />
             {contact.whatsapp && <BigButton variant="soft" label={t("whatsapp")} href={waLink(contact.phone, t("waPrefill"))} />}
           </div>
-        ) : !isOwner && <p className="card p-3 text-muted">☎️ {t("phoneAfterAccept")}</p>}
+        ) : !isOwner && <p className="card p-3 text-muted"><Icon name="phone" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("phoneAfterAccept")}</p>}
         <BigButton variant="surface" label={t("directions")} href={directionsLink(dest.lat, dest.lng)} />
         {!isOwner && <BigButton variant="surface" label={t("report")} onClick={() => setShowReport(true)} />}
       </div>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../../lib/i18n";
+import { LogoutButton } from "../../components/ui/LogoutButton";
+import { IconLabel } from "../../components/ui/Icon";
 import { fmtDateTime, fmtTime } from "../../lib/time";
 import { Badge, Empty, Spinner } from "../../components/ui/Bits";
 import { useFamilyLinks } from "./familyData";
@@ -20,8 +22,9 @@ export default function FamilyHome() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-[1.8rem] font-bold flex-1">{t("famHomeTitle")}</h1>
-        <Link to="/family/link" className="min-h-12 px-5 rounded-2xl bg-primary text-on-primary font-bold flex items-center">{t("famLinkUser")}</Link>
+        <h1 className="text-[1.5rem] font-bold flex-1">{t("famHomeTitle")}</h1>
+        <LogoutButton />
+        <Link to="/family/link" className="min-h-11 px-4 rounded-2xl bg-primary text-on-primary font-semibold flex items-center"><IconLabel label={t("famLinkUser")} size={20} /></Link>
       </div>
       {links.length === 0 ? <Empty text={t("famNoUsers")} icon="👨‍👩‍👧" /> : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -42,10 +45,10 @@ export default function FamilyHome() {
                 {s && (
                   <ul className="flex flex-col gap-1">
                     <li className={s.checkin ? "text-success font-semibold" : s.checkinOverdue ? "text-danger font-semibold" : ""}>
-                      {s.checkin ? t("famCheckin", { time: fmtTime(s.checkin.created_at, lang) }) : t("famNoCheckin")}
+                      <IconLabel size={18} label={s.checkin ? t("famCheckin", { time: fmtTime(s.checkin.created_at, lang) }) : t("famNoCheckin")} />
                     </li>
-                    <li className={s.missed.length ? "text-danger font-semibold" : ""}>{t("famDoses", { taken: s.taken, total: s.total })}{s.missed.length ? ` · ${t("missed")} ${s.missed.length}` : ""}</li>
-                    {s.lastSos && <li className={s.sosToday.length ? "text-danger font-bold" : "text-muted"}>{t("famLastSos", { time: fmtDateTime(s.lastSos.created_at, lang) })}</li>}
+                    <li className={s.missed.length ? "text-danger font-semibold" : ""}><IconLabel size={18} label={`${t("famDoses", { taken: s.taken, total: s.total })}${s.missed.length ? ` · ${t("missed").replace(/^\S+\s/, "")} ${s.missed.length}` : ""}`} /></li>
+                    {s.lastSos && <li className={s.sosToday.length ? "text-danger font-bold" : "text-muted"}><IconLabel size={18} label={t("famLastSos", { time: fmtDateTime(s.lastSos.created_at, lang) })} /></li>}
                     <li className="text-sm text-muted">{t("lastActive", { time: profile?.last_seen ? fmtDateTime(profile.last_seen, lang) : t("never") })}</li>
                   </ul>
                 )}

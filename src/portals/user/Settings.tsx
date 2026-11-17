@@ -14,6 +14,7 @@ import { PhotoUpload } from "../../components/ui/PhotoUpload";
 import { BigButton } from "../../components/ui/BigButton";
 import { ActivityLogList } from "../../components/ActivityLogList";
 import type { FamilyLink, LinkLevel, Mode, PublicProfile } from "../../lib/types";
+import { Icon } from "../../components/ui/Icon";
 
 export default function Settings() {
   const { t } = useI18n();
@@ -160,7 +161,7 @@ function FamilyLinksSection() {
           {links.map((l) => (
             <li key={l.id} className="card p-4 flex flex-col gap-3">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-bold text-lg flex-1">👤 {l.fam?.name ?? "…"}</span>
+                <span className="font-bold text-lg flex-1"><Icon name="user" size={18} className="inline-block align-[-0.25em] mr-1.5" />{l.fam?.name ?? "…"}</span>
                 <Badge tone={l.status === "active" ? "success" : "warn"}>{t(`status_${l.status}` as const)}</Badge>
               </div>
               {l.status === "active" && (

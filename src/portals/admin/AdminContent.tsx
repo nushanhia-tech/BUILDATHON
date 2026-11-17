@@ -7,6 +7,7 @@ import { Field, Sheet, Spinner, Tabs } from "../../components/ui/Bits";
 import { ConfirmDialog } from "../../components/ui/ConfirmDialog";
 import { PhotoUpload } from "../../components/ui/PhotoUpload";
 import type { Helpline, QuickPhrase, SignCard } from "../../lib/types";
+import { Icon } from "../../components/ui/Icon";
 
 type Tab = "signs" | "phrases" | "helplines";
 
@@ -67,8 +68,8 @@ function SignsAdmin() {
             <p className="font-bold">{c.meaning_ml}</p>
             <p className="text-muted text-sm">{c.meaning_en} · {c.category}</p>
             <div className="flex gap-1">
-              <button onClick={() => open(c)} className="flex-1 min-h-10 rounded-lg bg-soft">✏️</button>
-              <button onClick={() => setDel(c)} className="flex-1 min-h-10 rounded-lg bg-soft text-danger">🗑️</button>
+              <button onClick={() => open(c)} className="flex-1 min-h-10 rounded-lg bg-soft"><Icon name="edit" size={20} /></button>
+              <button onClick={() => setDel(c)} className="flex-1 min-h-10 rounded-lg bg-soft text-danger"><Icon name="trash" size={20} /></button>
             </div>
           </li>
         ))}
@@ -129,8 +130,8 @@ function SimpleCrud<T extends { id: string }>({ table, fields, render, order, fi
         {rows.map((r) => (
           <li key={r.id} className="p-3 flex items-center gap-3">
             <span className="flex-1">{render(r)}</span>
-            <button onClick={() => setEdit(r)} className="min-h-10 min-w-10 rounded-lg bg-soft" aria-label={t("edit")}>✏️</button>
-            <button onClick={() => setDel(r)} className="min-h-10 min-w-10 rounded-lg bg-soft text-danger" aria-label={t("delete")}>🗑️</button>
+            <button onClick={() => setEdit(r)} className="min-h-10 min-w-10 rounded-lg bg-soft" aria-label={t("edit")}><Icon name="edit" size={20} /></button>
+            <button onClick={() => setDel(r)} className="min-h-10 min-w-10 rounded-lg bg-soft text-danger" aria-label={t("delete")}><Icon name="trash" size={20} /></button>
           </li>
         ))}
       </ul>

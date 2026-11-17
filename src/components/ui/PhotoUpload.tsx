@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useI18n } from "../../lib/i18n";
 import { uploadPhoto } from "../../lib/storage";
 import { errMsg, useToast } from "../../hooks/useToast";
+import { Icon } from "./Icon";
 
 /** Pick/capture photos and upload them to Supabase Storage. */
 export function PhotoUpload({ value, onChange, max = 1, folder }: { value: string[]; onChange: (urls: string[]) => void; max?: number; folder: string }) {
@@ -29,7 +30,7 @@ export function PhotoUpload({ value, onChange, max = 1, folder }: { value: strin
           <div key={u} className="relative">
             <img src={u} alt={t("photo")} className="w-24 h-24 object-cover rounded-2xl border-2 border-line" />
             <button type="button" aria-label={t("delete")} onClick={() => onChange(value.filter((x) => x !== u))}
-              className="absolute -top-2 -right-2 w-9 h-9 rounded-full bg-danger text-on-danger font-bold">✕</button>
+              className="absolute -top-2 -right-2 w-9 h-9 rounded-full bg-danger text-on-danger font-bold"><Icon name="close" size={20} /></button>
           </div>
         ))}
       </div>

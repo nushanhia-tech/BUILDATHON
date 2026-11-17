@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import L from "leaflet";
 import { CircleMarker, MapContainer, Marker, Popup, TileLayer, Tooltip, useMap, useMapEvents } from "react-leaflet";
+import { Icon } from "../ui/Icon";
 
 export interface MapPoint { id: string; lat: number; lng: number; color: string; label: string; onClick?: () => void; }
 
-const pinIcon = L.divIcon({ className: "", html: '<div style="font-size:42px;line-height:42px;transform:translate(-50%,-100%)">📍</div>', iconSize: [0, 0] });
+const pinIcon = L.divIcon({ className: "", html: '<div style="font-size:42px;line-height:42px;transform:translate(-50%,-100%)"><Icon name="pin" size={20} /></div>', iconSize: [0, 0] });
 
 function Recenter({ lat, lng, zoom }: { lat: number; lng: number; zoom?: number }) {
   const map = useMap();
@@ -35,7 +36,7 @@ export function MapView({ center, zoom = 12, points = [], me, pin, onPinMove, he
         ))}
         {me && (
           <CircleMarker center={[me.lat, me.lng]} radius={9} pathOptions={{ color: "#fff", weight: 3, fillColor: "#2563eb", fillOpacity: 1 }}>
-            <Popup>📍</Popup>
+            <Popup><Icon name="pin" size={20} /></Popup>
           </CircleMarker>
         )}
         {pin && onPinMove && (

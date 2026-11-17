@@ -5,6 +5,7 @@ import { useToast } from "../../hooks/useToast";
 import { fmtDate } from "../../lib/time";
 import { Badge, Spinner } from "../../components/ui/Bits";
 import type { Profile } from "../../lib/types";
+import { Icon } from "../../components/ui/Icon";
 
 export default function AdminUsers() {
   const { t, lang } = useI18n();
@@ -26,7 +27,7 @@ export default function AdminUsers() {
   return (
     <div>
       <h1 className="text-[1.8rem] font-bold mb-2">{t("admUsers")}</h1>
-      <p className="text-muted mb-4">🔒 {t("medicalHidden")}</p>
+      <p className="text-muted mb-4"><Icon name="lock" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("medicalHidden")}</p>
       <input className="!w-64 mb-3" value={q} onChange={(e) => setQ(e.target.value)} placeholder={`🔎 ${t("search")}`} aria-label={t("search")} />
       <div className="card overflow-x-auto">
         <table className="w-full text-left">
@@ -34,7 +35,7 @@ export default function AdminUsers() {
           <tbody>
             {list.map((p) => (
               <tr key={p.id} className={`border-t border-line ${p.blocked ? "opacity-60" : ""}`}>
-                <td className="p-3 font-semibold">{p.name} {p.blocked && <Badge tone="danger">🚫</Badge>}</td>
+                <td className="p-3 font-semibold">{p.name} {p.blocked && <Badge tone="danger"><Icon name="block" size={20} /></Badge>}</td>
                 <td className="p-3">{p.role}</td>
                 <td className="p-3">{p.modes.map((m) => t(`mode_${m}` as const)).join(", ") || "—"}</td>
                 <td className="p-3">{p.verified ? "✔️" : "—"}</td>

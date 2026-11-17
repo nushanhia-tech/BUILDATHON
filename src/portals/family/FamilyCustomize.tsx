@@ -8,6 +8,7 @@ import { DisplayEditor, type DisplayDraft } from "../../components/settings/Disp
 import { HomePreview } from "../../components/settings/HomePreview";
 import { Section, Spinner } from "../../components/ui/Bits";
 import { useFamilyScope } from "./familyData";
+import { Icon } from "../../components/ui/Icon";
 
 /** Remote "എന്റെ App ക്രമീകരിക്കാം" with a live phone preview (full access only). */
 export default function FamilyCustomize() {
@@ -26,7 +27,7 @@ export default function FamilyCustomize() {
     setDisplay({ text_size: settings.text_size, high_contrast: settings.high_contrast, voice_on: settings.voice_on, voice_rate: Number(settings.voice_rate), vibration: settings.vibration, language: settings.language });
   }, [settings]);
 
-  if (!canFull) return <p className="card p-5 text-warn font-semibold">🔒 {t("famNeedFull")}</p>;
+  if (!canFull) return <p className="card p-5 text-warn font-semibold"><Icon name="lock" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("famNeedFull")}</p>;
   if (!loaded || !draft || !display) return <Spinner />;
 
   const submit = async () => {
@@ -44,7 +45,7 @@ export default function FamilyCustomize() {
         <button disabled={busy} onClick={submit} className="w-full min-h-16 rounded-2xl bg-primary text-on-primary font-bold text-xl sticky bottom-3">{busy ? t("loading") : t("saveChanges")}</button>
       </div>
       <aside className="lg:sticky lg:top-6">
-        <h2 className="font-bold text-lg mb-3 text-center">📱 {t("livePreview")}</h2>
+        <h2 className="font-bold text-lg mb-3 text-center"><Icon name="phone" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("livePreview")}</h2>
         <HomePreview name={(profile?.name ?? "").split(" ")[0]} modules={visibleModules(modules, draft)} highContrast={display.high_contrast} xl={display.text_size === "xl"} />
       </aside>
     </div>

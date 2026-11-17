@@ -15,6 +15,8 @@ import type { FamilyLink, LinkLevel, MedLog, Medicine, PublicProfile, UserSettin
 import { FlashOverlay } from "../../components/ui/FlashOverlay";
 import { NavIcon } from "../../components/ui/NavIcon";
 import { Spinner } from "../../components/ui/Bits";
+import { Icon } from "../../components/ui/Icon";
+import { LogoutButton } from "../../components/ui/LogoutButton";
 
 export default function UserLayout() {
   const { profile } = useAuth();
@@ -49,7 +51,7 @@ function LanguageToggle() {
   return (
     <button type="button" className="lang-toggle" aria-label={`${t("language")}: ${next === "en" ? "English" : "മലയാളം"}`}
       onClick={() => { setLang(next); void save({ language: next }).catch(() => {}); }}>
-      🌐 {next === "en" ? "English" : "മലയാളം"}
+      <Icon name="globe" size={18} /> {next === "en" ? "English" : "മലയാളം"}
     </button>
   );
 }
@@ -74,7 +76,10 @@ function UserShell() {
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-surface p-3 rounded-xl z-50">Skip</a>
       <div className="user-topbar">
         <div className="user-brand brand"><img src="/icon-192.png" alt="" className="brand-logo" /> Sa Hai</div>
-        <LanguageToggle />
+        <div className="flex items-center gap-2">
+          <LanguageToggle />
+          {loc.pathname === "/app" && <LogoutButton />}
+        </div>
       </div>
       <main id="main" className={`user-main mx-auto w-full px-4 pt-5 ${onboarding ? "pb-10" : "safe-bottom"}`}>
         <Outlet />
@@ -86,7 +91,7 @@ function UserShell() {
               <li key={tab.to} className="flex-1">
                 <NavLink to={tab.to} end={tab.end} className={({ isActive }) =>
                   `min-h-16 flex flex-col items-center justify-center gap-0.5 font-semibold text-sm ${isActive ? "text-primary" : "text-muted"}`}>
-                  <span aria-hidden="true" className="text-2xl">{tab.icon}</span>
+                  <span aria-hidden="true">{tab.icon}</span>
                   {tab.label}
                 </NavLink>
               </li>
@@ -170,7 +175,7 @@ function MedicineReminder() {
         <FlashOverlay open text={msg} sub={t("medReminderTitle")} persistent onClose={() => close(10)} />
         <div className="fixed bottom-6 inset-x-4 z-[960] grid grid-cols-2 gap-3">
           <button onClick={() => close(10)} className="min-h-20 rounded-3xl bg-white text-black font-bold text-xl">{t("snooze")}</button>
-          <button onClick={take} className="min-h-20 rounded-3xl bg-success text-white font-bold text-xl">{t("taken")}</button>
+          <button onClick={take} className="min-h-14 rounded-2xl bg-success text-white font-bold text-xl">{t("taken")}</button>
         </div>
       </>
     );
@@ -223,8 +228,8 @@ function LinkApprovalPrompt() {
   return (
     <div className="fixed inset-0 z-[900] bg-black/60 grid place-items-center p-4" role="dialog" aria-modal="true" aria-labelledby="link-title">
       <div className="card w-full max-w-md p-6 flex flex-col gap-4">
-        <p className="text-5xl text-center" aria-hidden="true">👨‍👩‍👧</p>
-        <h2 id="link-title" className="text-[1.4rem] font-bold text-center">{t("linkRequest", { name: link.fam?.name ?? t("someone") })}</h2>
+        <p className="text-5xl text-center" aria-hidden="true"><Icon name="family" size={40} /></p>
+        <h2 id="link-title" className="text-[1.15rem] font-bold text-center">{t("linkRequest", { name: link.fam?.name ?? t("someone") })}</h2>
         <p className="font-semibold">{t("chooseLevel")}</p>
         <div role="radiogroup" className="flex flex-col gap-2">
           {levels.map((lv) => (
@@ -236,8 +241,8 @@ function LinkApprovalPrompt() {
           ))}
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <button onClick={() => answer(false)} className="min-h-20 rounded-3xl bg-soft font-bold text-xl border-2 border-line">{t("deny")}</button>
-          <button onClick={() => answer(true)} className="min-h-20 rounded-3xl bg-primary text-on-primary font-bold text-xl">{t("allow")}</button>
+          <button onClick={() => answer(false)} className="min-h-14 rounded-2xl bg-soft font-semibold border border-line">{t("deny")}</button>
+          <button onClick={() => answer(true)} className="min-h-14 rounded-2xl bg-primary text-on-primary font-bold text-xl">{t("allow")}</button>
         </div>
       </div>
     </div>

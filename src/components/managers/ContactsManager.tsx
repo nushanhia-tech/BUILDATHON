@@ -11,6 +11,7 @@ import { BigButton } from "../ui/BigButton";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { PhotoUpload } from "../ui/PhotoUpload";
 import { useNames } from "./useNames";
+import { Icon } from "../ui/Icon";
 
 export function useContacts(userId: string) {
   const [contacts, setContacts] = useState<Contact[] | null>(null);
@@ -53,7 +54,7 @@ export function ContactsManager({ userId, actor, level = "full", highlight }: { 
       {actor === "user" && pending.map((c) => (
         <div key={c.id} role="alert" className="card p-4 border-l-8 border-warn flex flex-col gap-3">
           <p className="font-bold">{t("familyAddedContact", { who: names[c.added_by ?? ""] ?? t("someone") })}</p>
-          <p className="text-[1.2rem]">👤 {c.name} · {c.relation} · {c.phone}</p>
+          <p className="text-[1.2rem]"><Icon name="user" size={18} className="inline-block align-[-0.25em] mr-1.5" />{c.name} · {c.relation} · {c.phone}</p>
           <div className="grid grid-cols-2 gap-2">
             <BigButton variant="surface" label={t("rejectItem")} onClick={() => void confirm(c, false)} />
             <BigButton variant="success" label={t("confirmItem")} onClick={() => void confirm(c, true)} />
@@ -70,7 +71,7 @@ export function ContactsManager({ userId, actor, level = "full", highlight }: { 
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-[1.3rem]">{c.name}</p>
                   <p className="text-muted">{c.relation}</p>
-                  <div className="flex flex-wrap gap-1">{c.is_sos && <Badge tone="danger">🆘 SOS</Badge>}{c.needs_confirmation && <Badge tone="warn">{t("pendingApprovalBadge")}</Badge>}</div>
+                  <div className="flex flex-wrap gap-1">{c.is_sos && <Badge tone="danger"><Icon name="sos" size={18} className="inline-block align-[-0.25em] mr-1.5" />SOS</Badge>}{c.needs_confirmation && <Badge tone="warn">{t("pendingApprovalBadge")}</Badge>}</div>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -79,8 +80,8 @@ export function ContactsManager({ userId, actor, level = "full", highlight }: { 
               </div>
               {canEdit && (
                 <div className="flex gap-2">
-                  <button type="button" onClick={() => setEdit(c)} className="flex-1 min-h-12 rounded-2xl bg-soft font-semibold">✏️ {t("edit")}</button>
-                  <button type="button" onClick={() => setDel(c)} className="flex-1 min-h-12 rounded-2xl bg-soft text-danger font-semibold">🗑️ {t("delete")}</button>
+                  <button type="button" onClick={() => setEdit(c)} className="flex-1 min-h-12 rounded-2xl bg-soft font-semibold"><Icon name="edit" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("edit")}</button>
+                  <button type="button" onClick={() => setDel(c)} className="flex-1 min-h-12 rounded-2xl bg-soft text-danger font-semibold"><Icon name="trash" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("delete")}</button>
                 </div>
               )}
             </li>

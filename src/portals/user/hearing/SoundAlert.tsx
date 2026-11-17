@@ -6,6 +6,7 @@ import { vibrate, vibrationSupported } from "../../../lib/stt";
 import { BigButton } from "../../../components/ui/BigButton";
 import { FlashOverlay } from "../../../components/ui/FlashOverlay";
 import { Section, Empty } from "../../../components/ui/Bits";
+import { Icon } from "../../../components/ui/Icon";
 
 /** Sensitivity 0..100 → threshold in dBFS (higher sensitivity = quieter sounds trigger). */
 export const thresholdDb = (sens: number) => -10 - sens * 0.5;
@@ -73,8 +74,8 @@ export function SoundAlert() {
     <div className="flex flex-col gap-4">
       <p className="text-muted">{t("alertHelp")}</p>
       {!vibrationSupported && <p className="card p-3 text-warn">{t("noVibration")}</p>}
-      {running ? <BigButton variant="danger" label={t("stopAlert")} className="min-h-24 text-[1.4rem]" onClick={stop} />
-        : <BigButton label={t("startAlert")} className="min-h-24 text-[1.4rem]" onClick={start} />}
+      {running ? <BigButton variant="danger" label={t("stopAlert")} className="min-h-14 text-[1.05rem]" onClick={stop} />
+        : <BigButton label={t("startAlert")} className="min-h-14 text-[1.05rem]" onClick={start} />}
       {mic.error && <p className="text-danger">{t("micError")}</p>}
       {running && <p className="card p-3">{wake ? t("wakeLockOn") : `💡 ${t("keepScreenOn")}`}</p>}
 
@@ -93,7 +94,7 @@ export function SoundAlert() {
       <Section title={t("alertLog")}>
         {log.length === 0 ? <Empty icon="🔕" /> : (
           <ul className="card divide-y divide-line">
-            {log.map((l, i) => <li key={i} className="p-3">🔔 {l.at.toLocaleTimeString(lang === "ml" ? "ml-IN" : "en-IN")} · {l.db} dB</li>)}
+            {log.map((l, i) => <li key={i} className="p-3"><Icon name="bell" size={18} className="inline-block align-[-0.25em] mr-1.5" />{l.at.toLocaleTimeString(lang === "ml" ? "ml-IN" : "en-IN")} · {l.db} dB</li>)}
           </ul>
         )}
       </Section>

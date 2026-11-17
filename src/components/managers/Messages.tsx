@@ -10,6 +10,7 @@ import type { Message } from "../../lib/types";
 import { Empty, Spinner } from "../ui/Bits";
 import { BigButton } from "../ui/BigButton";
 import { useNames } from "./useNames";
+import { Icon } from "../ui/Icon";
 
 /** Conversation between `me` and `other` (or all of my conversations if other is omitted). */
 export function MessageThread({ me, other, big = false, canRecord = false }: { me: string; other?: string; big?: boolean; canRecord?: boolean }) {
@@ -69,11 +70,11 @@ export function MessageThread({ me, other, big = false, canRecord = false }: { m
             return (
               <li key={m.id} className={`max-w-[85%] rounded-3xl p-4 ${mine ? "self-end bg-primary text-on-primary" : "self-start card"}`}>
                 {!mine && <p className="text-sm font-semibold opacity-80">{names[m.from_id] ?? ""}</p>}
-                {m.text && <p className={big ? "text-[1.5rem] font-semibold leading-snug" : ""}>{m.text}</p>}
+                {m.text && <p className={big ? "text-[1.2rem] font-semibold leading-snug" : ""}>{m.text}</p>}
                 {m.audio_url && <audio controls src={m.audio_url} className="mt-2 w-full max-w-xs" aria-label={t("playAudio")} />}
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-xs opacity-70 flex-1">{fmtDateTime(m.created_at, lang)}</span>
-                  {m.text && !mine && <button type="button" onClick={() => speak(m.text!, { force: true })} aria-label={t("readAloud")} className="min-h-12 min-w-12 rounded-xl bg-soft text-primary">🔊</button>}
+                  {m.text && !mine && <button type="button" onClick={() => speak(m.text!, { force: true })} aria-label={t("readAloud")} className="min-h-12 min-w-12 rounded-xl bg-soft text-primary"><Icon name="speaker" size={20} /></button>}
                 </div>
               </li>
             );
@@ -83,7 +84,7 @@ export function MessageThread({ me, other, big = false, canRecord = false }: { m
       {target && (
         <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); if (text.trim()) void send({ text: text.trim() }); }}>
           <input value={text} onChange={(e) => setText(e.target.value)} placeholder={t("typeHere")} aria-label={t("message")} />
-          <button type="submit" className="min-h-16 min-w-16 rounded-2xl bg-primary text-on-primary font-bold" aria-label={t("sendMessage")}>➤</button>
+          <button type="submit" className="min-h-16 min-w-16 rounded-2xl bg-primary text-on-primary font-bold" aria-label={t("sendMessage")}><Icon name="send" size={20} /></button>
         </form>
       )}
       {canRecord && target && (rec

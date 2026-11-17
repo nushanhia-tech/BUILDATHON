@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useI18n } from "../../../lib/i18n";
 import { speak } from "../../../lib/tts";
 import { BigButton } from "../../../components/ui/BigButton";
+import { Icon } from "../../../components/ui/Icon";
 
 export function OcrTab() {
   const { t } = useI18n();
@@ -50,8 +51,8 @@ export function OcrTab() {
     <div className="flex flex-col gap-4">
       <p className="text-muted">{t("ocrHelp")}</p>
       <div className="grid grid-cols-2 gap-3">
-        <BigButton label={t("takePhoto")} onClick={() => camInput.current?.click()} className="min-h-24" />
-        <BigButton variant="surface" label={t("uploadImage")} onClick={() => fileInput.current?.click()} className="min-h-24" />
+        <BigButton label={t("takePhoto")} onClick={() => camInput.current?.click()} className="min-h-16" />
+        <BigButton variant="surface" label={t("uploadImage")} onClick={() => fileInput.current?.click()} className="min-h-16" />
       </div>
       <input ref={camInput} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => void run(e.target.files?.[0])} />
       <input ref={fileInput} type="file" accept="image/*" className="hidden" onChange={(e) => void run(e.target.files?.[0])} />
@@ -75,11 +76,11 @@ export function OcrTab() {
             <BigButton variant="soft" label={t("readThis")} onClick={() => speak(text, { force: true })} />
             <BigButton label={aiState === "busy" ? t("simplifying") : t("simplify")} disabled={aiState === "busy"} onClick={simplify} />
           </div>
-          <p className="text-sm bg-amber-50 text-warn rounded-2xl p-3 font-semibold">⚠️ {t("aiDisclaimer")}</p>
+          <p className="text-sm bg-amber-50 text-warn rounded-2xl p-3 font-semibold"><Icon name="alert" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("aiDisclaimer")}</p>
           {aiState === "error" && <p className="text-danger font-semibold" role="alert">{aiMsg}</p>}
           {simple && (
             <div className="bg-soft rounded-2xl p-4">
-              <p className="font-bold mb-1">🤖 {t("simplified")}</p>
+              <p className="font-bold mb-1"><Icon name="sparkle" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("simplified")}</p>
               <p className="whitespace-pre-wrap" style={{ fontSize: `${size}rem` }}>{simple}</p>
               <BigButton variant="surface" className="mt-3 w-full" label={t("readThis")} onClick={() => speak(simple, { force: true })} />
             </div>

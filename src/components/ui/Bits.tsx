@@ -2,24 +2,25 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../../lib/i18n";
 import { ReadAloudButton } from "./ReadAloudButton";
+import { Icon, IconLabel, iconFor } from "./Icon";
 
 /** User-portal screen header: back, title (≥28px), help text, read-aloud. */
 export function PageHeader({ title, help, back = "/app", icon, extra }: { title: string; help?: string; back?: string | null; icon?: string; extra?: ReactNode }) {
   const { t } = useI18n();
   return (
-    <header className="flex flex-col gap-3 mb-5">
+    <header className="flex flex-col gap-2.5 mb-5">
       <div className="flex items-center gap-3">
         {back !== null && (
-          <Link to={back} aria-label={t("back")} className="min-h-16 min-w-16 grid place-items-center rounded-2xl card text-2xl font-bold">
-            ←
+          <Link to={back} aria-label={t("back")} className="h-12 w-12 shrink-0 grid place-items-center rounded-2xl card text-primary">
+            <Icon name="back" size={24} />
           </Link>
         )}
-        <h1 className="text-[1.4rem] font-bold leading-snug flex-1">
-          {icon && <span aria-hidden="true" className="mr-2">{icon}</span>}
-          {title}
-        </h1>
+        {icon && iconFor(icon) && (
+          <span aria-hidden="true" className="h-12 w-12 shrink-0 grid place-items-center rounded-2xl bg-soft text-primary"><Icon name={iconFor(icon)!} size={26} /></span>
+        )}
+        <h1 className="text-[1.3rem] font-bold leading-snug flex-1 min-w-0">{title}</h1>
       </div>
-      {help && <p className="text-muted">{help}</p>}
+      {help && <p className="text-muted text-[0.95rem]">{help}</p>}
       <div className="flex flex-wrap gap-2">
         <ReadAloudButton text={[title, help ?? ""]} />
         {extra}
@@ -40,11 +41,11 @@ export function Tabs<T extends string>({ items, value, onChange, big = true }: {
           type="button"
           aria-selected={value === it.key}
           onClick={() => onChange(it.key)}
-          className={`shrink-0 rounded-full px-5 font-bold border-2 ${big ? "min-h-16" : "min-h-12 text-base"} ${
+          className={`shrink-0 rounded-full px-4 font-semibold border ${big ? "min-h-12" : "min-h-10 text-sm"} ${
             value === it.key ? "bg-primary text-on-primary border-primary" : "bg-surface text-ink border-line"
           }`}
         >
-          {it.label}
+          <IconLabel label={it.label} size={19} />
         </button>
       ))}
     </div>
@@ -91,7 +92,7 @@ export function Empty({ text, icon = "🌙" }: { text?: string; icon?: string })
   const { t } = useI18n();
   return (
     <div className="card p-6 text-center text-muted flex flex-col items-center gap-2">
-      <span className="text-4xl" aria-hidden="true">{icon}</span>
+      <span className="w-12 h-12 rounded-2xl bg-soft text-primary grid place-items-center" aria-hidden="true">{iconFor(icon) ? <Icon name={iconFor(icon)!} size={26} /> : icon}</span>
       {text ?? t("empty")}
     </div>
   );
@@ -101,7 +102,7 @@ export function Section({ title, children, action }: { title: string; children: 
   return (
     <section className="flex flex-col gap-3 mb-6">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-[1.15rem] font-bold">{title}</h2>
+        <h2 className="text-[1.1rem] font-bold"><IconLabel label={title} size={22} /></h2>
         {action}
       </div>
       {children}
@@ -122,8 +123,8 @@ export function Sheet({ open, title, onClose, children }: { open: boolean; title
     <div className="fixed inset-0 z-[800] bg-black/50 flex items-end sm:items-center justify-center" role="dialog" aria-modal="true" aria-label={title}>
       <div className="bg-surface w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 pb-8">
         <div className="flex items-center justify-between mb-4 gap-2">
-          <h2 className="text-[1.4rem] font-bold">{title}</h2>
-          <button type="button" onClick={onClose} aria-label={t("close")} className="min-h-14 min-w-14 rounded-2xl bg-soft text-xl font-bold">✕</button>
+          <h2 className="text-[1.2rem] font-bold">{title}</h2>
+          <button type="button" onClick={onClose} aria-label={t("close")} className="min-h-14 min-w-14 rounded-2xl bg-soft text-xl font-bold"><Icon name="close" size={20} /></button>
         </div>
         {children}
       </div>
@@ -141,8 +142,8 @@ export function ChipGroup<T extends string>({ label, options, value, onChange }:
       <div role="radiogroup" className="flex flex-wrap gap-2">
         {options.map((o) => (
           <button key={o.value} type="button" role="radio" aria-checked={value === o.value} onClick={() => onChange(o.value)}
-            className={`min-h-14 px-4 rounded-2xl font-semibold border-2 ${value === o.value ? "bg-primary text-on-primary border-primary" : "bg-surface border-line"}`}>
-            {o.label}
+            className={`min-h-12 px-4 rounded-2xl font-semibold border ${value === o.value ? "bg-primary text-on-primary border-primary" : "bg-surface border-line"}`}>
+            <IconLabel label={o.label} size={18} />
           </button>
         ))}
       </div>

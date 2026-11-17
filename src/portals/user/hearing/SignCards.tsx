@@ -4,6 +4,7 @@ import { supabase } from "../../../lib/supabase";
 import { speak } from "../../../lib/tts";
 import { Empty, Spinner } from "../../../components/ui/Bits";
 import type { SignCard } from "../../../lib/types";
+import { Icon } from "../../../components/ui/Icon";
 
 export function SignCards() {
   const { t, lang } = useI18n();
@@ -26,7 +27,7 @@ export function SignCards() {
       {sod && (
         <button type="button" onClick={() => show(sod)} className="hero p-4 flex items-center gap-4 text-left">
           <img src={sod.image_url} alt="" className="w-28 h-28 rounded-2xl bg-white object-contain" />
-          <span><span className="block opacity-90">⭐ {t("signOfDay")}</span><span className="block text-[1.8rem] font-bold">{sod.meaning_ml}</span><span className="block">{sod.meaning_en}</span></span>
+          <span><span className="block opacity-90"><Icon name="star" size={18} className="inline-block align-[-0.25em] mr-1.5" />{t("signOfDay")}</span><span className="block text-[1.8rem] font-bold">{sod.meaning_ml}</span><span className="block">{sod.meaning_en}</span></span>
         </button>
       )}
       <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={`🔎 ${t("search")}`} aria-label={t("search")} />

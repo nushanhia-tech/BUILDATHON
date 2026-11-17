@@ -48,7 +48,7 @@ export function LightTab() {
       <CameraBox videoRef={cam.videoRef} active={cam.active} error={cam.error} onStart={() => void cam.start()} onStop={cam.stop} />
       {cam.active && (
         <>
-          <BigButton label={t("checkNow")} className="min-h-24 text-[1.4rem]" onClick={() => check(true)} />
+          <BigButton label={t("checkNow")} className="min-h-14 text-[1.05rem]" onClick={() => check(true)} />
           <div className="card p-4"><Toggle label={t("autoMode")} checked={auto} onChange={setAuto} /></div>
         </>
       )}

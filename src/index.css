@@ -31,10 +31,11 @@
   --on-danger: #ffffff;
   --success: #15803d;
   --warn: #b45309;
+  --accent: #FFB90B;
   --shadow: 0 10px 30px rgba(100, 73, 159, 0.07);
-  font-size: 17px; /* "large" */
+  font-size: 16px; /* "large" */
 }
-html.text-xl-mode { font-size: 20px; }
+html.text-xl-mode { font-size: 19px; }
 html.portal-desktop { font-size: 15px; }
 html.portal-desktop.text-xl-mode { font-size: 17px; }
 
@@ -216,3 +217,11 @@ h1, h2, h3 { line-height: 1.35; letter-spacing: 0; }
 .brand-logo { width: 2.4rem; height: 2.4rem; border-radius: .7rem; box-shadow: 0 4px 12px #4627f422; }
 .auth-logo { padding: 0; object-fit: cover; }
 .care-logo { position: relative; z-index: 1; width: 13rem; max-width: 70%; border-radius: 1.5rem; box-shadow: 0 22px 40px #4627f433; }
+
+/* Compact, aligned controls */
+.lang-toggle { display: inline-flex; align-items: center; gap: .4rem; min-height: 2.5rem; padding: 0 .85rem; font-size: .85rem; }
+.logout-btn { color: var(--danger); }
+.tile { padding: 1rem; }
+.tile .module-icon { margin-bottom: 0; }
+html.hc { --accent: #00e5ff; }
+.tile .module-icon { width: 3rem; height: 3rem; border-radius: 1rem; }

@@ -12,6 +12,7 @@ import { BigButton } from "../ui/BigButton";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { PhotoUpload } from "../ui/PhotoUpload";
 import { useNames } from "./useNames";
+import { Icon, IconLabel } from "../ui/Icon";
 
 interface Props { userId: string; actor: "user" | "family"; level?: LinkLevel; showHistory?: boolean; }
 
@@ -74,7 +75,7 @@ export function MedicinesManager({ userId, actor, level = "full", showHistory = 
       {actor === "user" && pending.map((m) => (
         <div key={m.id} className="card p-4 mb-4 border-l-8 border-warn flex flex-col gap-3" role="alert">
           <p className="font-bold">{t("familyAddedMed", { who: names[m.added_by ?? ""] ?? t("someone") })}</p>
-          <p className="text-[1.3rem]">💊 {m.name} · {m.times.map((x) => hhmm12(x, lang)).join(", ")}</p>
+          <p className="text-[1.3rem]"><Icon name="pill" size={18} className="inline-block align-[-0.25em] mr-1.5" />{m.name} · {m.times.map((x) => hhmm12(x, lang)).join(", ")}</p>
           {m.notes && <p className="text-muted">{m.notes}</p>}
           <div className="grid grid-cols-2 gap-2">
             <BigButton variant="surface" label={t("rejectItem")} onClick={() => void confirm(m, false)} />
@@ -92,15 +93,15 @@ export function MedicinesManager({ userId, actor, level = "full", showHistory = 
           if (!ds.length) return null;
           return (
             <div key={s.key} className="flex flex-col gap-2 mb-3">
-              <h3 className="font-bold text-muted">{s.icon} {s.label}</h3>
+              <h3 className="font-semibold text-muted"><IconLabel label={`${s.icon} ${s.label}`} size={20} /></h3>
               {ds.map((d) => (
                 <div key={d.medicine.id + d.time} className={`card p-3 flex flex-col gap-3 ${d.status === "missed" ? "border-l-8 border-danger" : d.status === "due" ? "border-l-8 border-warn" : ""}`}>
                   <div className="flex items-center gap-3">
                     {d.medicine.photo_url ? <img src={d.medicine.photo_url} alt="" className="w-16 h-16 rounded-2xl object-cover shrink-0" />
-                      : <span className="w-16 h-16 rounded-2xl bg-soft grid place-items-center text-3xl shrink-0" aria-hidden="true">💊</span>}
+                      : <span className="w-16 h-16 rounded-2xl bg-soft grid place-items-center text-3xl shrink-0" aria-hidden="true"><Icon name="pill" size={28} /></span>}
                     <div className="flex-1 min-w-0">
                       <p className="font-bold break-words">{d.medicine.name}</p>
-                      <p className="text-muted text-base">🕒 {fmtTime(d.scheduled, lang)}{d.medicine.notes ? ` · ${d.medicine.notes}` : ""}</p>
+                      <p className="text-muted text-base"><Icon name="clock" size={18} className="inline-block align-[-0.25em] mr-1.5" />{fmtTime(d.scheduled, lang)}{d.medicine.notes ? ` · ${d.medicine.notes}` : ""}</p>
                     </div>
                     {(d.taken || actor !== "user") && (d.taken ? <Badge tone="success">{t("takenDone")}</Badge>
                       : <Badge tone={d.status === "missed" ? "danger" : "soft"}>{d.status === "missed" ? t("missed") : t("upcoming")}</Badge>)}
@@ -125,9 +126,9 @@ export function MedicinesManager({ userId, actor, level = "full", showHistory = 
                 {m.added_by && m.added_by !== userId && <span className="block text-sm text-muted">+ {names[m.added_by] ?? ""}</span>}
               </span>
               <span className="flex gap-2">
-                <button type="button" onClick={() => speak(`${m.name}. ${m.times.map((x) => hhmm12(x, lang)).join(", ")}. ${m.notes ?? ""}`, { force: true })} aria-label={`${t("readAloud")}: ${m.name}`} className="flex-1 min-h-14 rounded-2xl bg-soft">🔊</button>
-                {canEdit && <button type="button" onClick={() => setEdit(m)} aria-label={`${t("edit")}: ${m.name}`} className="flex-1 min-h-14 rounded-2xl bg-soft">✏️</button>}
-                {canEdit && <button type="button" onClick={() => setDel(m)} aria-label={`${t("delete")}: ${m.name}`} className="flex-1 min-h-14 rounded-2xl bg-soft text-danger">🗑️</button>}
+                <button type="button" onClick={() => speak(`${m.name}. ${m.times.map((x) => hhmm12(x, lang)).join(", ")}. ${m.notes ?? ""}`, { force: true })} aria-label={`${t("readAloud")}: ${m.name}`} className="flex-1 min-h-14 rounded-2xl bg-soft"><Icon name="speaker" size={20} /></button>
+                {canEdit && <button type="button" onClick={() => setEdit(m)} aria-label={`${t("edit")}: ${m.name}`} className="flex-1 min-h-14 rounded-2xl bg-soft"><Icon name="edit" size={20} /></button>}
+                {canEdit && <button type="button" onClick={() => setDel(m)} aria-label={`${t("delete")}: ${m.name}`} className="flex-1 min-h-14 rounded-2xl bg-soft text-danger"><Icon name="trash" size={20} /></button>}
               </span>
             </li>
           ))}
@@ -199,7 +200,7 @@ function MedicineForm({ userId, initial, onClose, onSaved }: { userId: string; i
           <div className="grid grid-cols-3 gap-2">
             {TIME_CHIPS.map((c) => (
               <button key={c.key} type="button" aria-pressed={times.includes(c.time)} onClick={() => toggle(c.time)}
-                className={`min-h-20 rounded-2xl font-bold border-4 flex flex-col items-center justify-center ${times.includes(c.time) ? "border-primary bg-soft text-primary" : "border-line"}`}>
+                className={`min-h-16 rounded-2xl font-semibold border-2 flex flex-col items-center justify-center ${times.includes(c.time) ? "border-primary bg-soft text-primary" : "border-line"}`}>
                 {t(c.key)}<span className="text-sm font-normal">{hhmm12(c.time, lang)}</span>
               </button>
             ))}
